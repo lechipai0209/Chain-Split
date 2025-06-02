@@ -4,9 +4,17 @@ pub strcut GroupAccount{
     pub name: [u8, 64],
     pub member_count: i64,
     pub expense_count: i64,
+    pub currency: Currency,
+    pub onchain_payment_enabled: bool,
+    pub balance_check_enabled: bool,
 }
 
-#[derive[Accounts]]
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, PartialEq, Eq)]
+pub enum CurrencyType {
+    TWD,
+    USD,
+}
+
 
 #[account]
 pub struct MemberAccount {
