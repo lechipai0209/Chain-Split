@@ -44,17 +44,29 @@ pub struct CreateExpenseAndParticipants<'info> {
 
 pub fn handler (
     ctx: Context<CreateExpenseAndParticipants>, 
+    participants: Vec<Pubkey>,
     amount: u64, 
     name: String,
     description: String,
 ) -> Result<()> {
+
+    // deal with expense_account basic info
     let expense_account = &mut ctx.accounts.expense_account ;
+    
     expense_account.group = ctx.accounts.group_account.key() ;
     expense_ccount.payer = ctx.accounts.payer.key(),
     expense_ccount.amount = amount ;
     expense.name = fixed_len_bytes::<32>(&name);
     expense.description = fixed_len_bytes::<64>(&description);
     expense_account.is_reversed = false ;
+
+    for(i, participant) in participants.iter().enumerate() {
+        let (participant_pda, bump) = Pubkey::find_program_address( // special for pda
+            &[b"participant", expense_account.key().as_ref(), participant.as_ref()],
+            ctx.program_id,
+        ) ; 
+    }
+
 
     
     
