@@ -65,6 +65,8 @@ pub fn handler (
             &[b"participant", expense_account.key().as_ref(), participant.as_ref()],
             ctx.program_id,
         ) ; 
+
+        let space = 8 + 32 + 
     }
 
 
