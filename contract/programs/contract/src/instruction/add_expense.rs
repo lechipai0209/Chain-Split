@@ -16,7 +16,9 @@ pub struct ExpenseAccount {
 
 
 #[derive(Accounts)]
-#[instruction(participants: Vec<Pubkey>)]
+#[instruction(participants: Vec<Pubkey>)] 
+// #[derive(Accounts)] can only put AccountInfo type
+//  normal parameters have to be plunge by this one
 pub struct CreateExpenseAndParticipants<'info> {
 
     #[account(mut)]
