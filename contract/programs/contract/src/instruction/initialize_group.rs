@@ -68,8 +68,7 @@ pub fn handler (
             }
         }
 
-
-        // update creator's memberaccount 
+        // update creator itself's member account 
         let member = &mut ctx.accoutns.member_account ;
         member.group = group.key() ;
         member.payer = ctx.accounts.payer.key() ;
