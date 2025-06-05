@@ -3,7 +3,7 @@ pub mod crate::state::*;
 
 /**
 #[account]
-pub struct Profile {
+pub struct ProfileAccount {
     pub name: [u8; 32],
     pub payer: Pubkey,
     pub group_count: u8,
@@ -33,7 +33,7 @@ pub struct JoinGroup<'info> {
         seeds = [b"Profile".as_ref(), payer.key().as_ref()],
         bump,
     )]
-    pub profile: Account<'info, Profile>,
+    pub profile: Account<'info, ProfileAccount>,
 
     #[account(mut)]
     pub group_account:Account<'info, GroupAccount>,
@@ -45,25 +45,25 @@ pub fn handler(ctx: Context<JoinGroup>, name: [u8, 32]) -> Result<()> {
     let signer = &ctx.accounts.signer;
     let group_account = &mut ctx.accounts.group_account;
     
+    // check payer = signer
     require_keys_eq!(profile.payer, signer.key(), CustomError::Unauthorized);
 
-
-    // 明天再研究怎麼寫
-
+    // check already joined
     let already_joined = group_account
         .member
         .iter()
         .any(|x| x == &signer.key());
-    require!(!already_joined, CustomError::AlreadyJoined);
-
-
+        
+    // check group full
     let has_group_slot = group_account
         .member
         .iter()
         .any(|m| *m == Pubkey::default());
-
+        
+    // check profile full
     let has_profile_slot = profile.group_count < profile.groups.len() as u8;
-
+    
+    require!(!already_joined, CustomError::AlreadyJoined);
     require!(has_group_slot, CustomError::GroupFull);
     require!(has_profile_slot, CustomError::GroupListFull);
 

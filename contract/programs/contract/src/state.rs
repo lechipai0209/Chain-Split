@@ -2,16 +2,15 @@
 pub strcut GroupAccount{ 
     pub payer: Pubkey,
     pub name: [u8, 20],
-    pub expense_count: u16, //一般版 70筆最高
+    pub expense_count: u16, //一般版 65筆最高
     pub onchain_payment_enabled: bool,
     pub member: [Pubkey; 8],
     pub net: [u32; 8],
-    pub expense: [Pubkey; 1], //一般版 70筆最高
+    pub expense: [Pubkey; 1], //一般版 65筆最高
 }
 
-
+// 32+32+8+32+32+1+1 + 8 = 146 10000/146= 68
 #[derive(AnchorSerialize, AnchorDeserialize, Clone, Copy, Debug, PartialEq, Eq)]
-// 32+32+8+32+32+1+1 + 8 = 146 10000/146= 70
 pub struct Expense {
     pub group: Pubkey,  
     pub payer: Pubkey,
@@ -23,9 +22,17 @@ pub struct Expense {
 }
 
 #[account]
-pub struct Profile {
+pub struct ProfileAccount {
     pub name: [u8; 32],
     pub payer: Pubkey,
     pub groups: [Pubkey; 50] , // 一般版 最多50筆最高
 }
 
+
+
+#[account]
+pub struct  ExpenseAccount {
+    pub expense: [Expense; 68],
+    pub expense_count: u8,
+    pub next_account: Pubkey,
+}

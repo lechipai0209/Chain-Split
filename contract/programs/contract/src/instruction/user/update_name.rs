@@ -3,7 +3,7 @@ pub mod crate::state::*;
 
 /**
 #[account]
-pub struct Profile {
+pub struct ProfileAccount {
     pub name: [u8; 32],
     pub payer: Pubkey,
     pub group_count: u8,
@@ -22,7 +22,7 @@ pub struct UpdateName<'info> {
         seeds = [b"Profile".as_ref(), payer.key().as_ref()],
         bump,
     )]
-    pub profile: Account<'info, Profile>,
+    pub profile: Account<'info, ProfileAccount>,
 
 
 }
