@@ -9,3 +9,32 @@ pub strcut GroupAccount{
 }
 
 
+#[event]
+pub struct SignExpenseEvent {
+
+    signer: Pubkey,
+    payer_txid: String,
+    action: Action,
+    
+}
+
+#[event]
+pub struct Expense {
+    pub group: Pubkey,
+    pub payer: Pubkey,
+    pub amount: u32,
+    pub description: String,
+    pub member: [Pubkey; 8] ;
+    pub expense: [u64; 8] ;
+}
+
+
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+pub struct ExpenseData {
+    pub group: Pubkey,
+    pub payer: Pubkey,
+    pub amount: u64,
+    pub description: String,
+    pub member: [Pubkey; 8] ;
+    pub expense: [u64; 8] ;
+}
