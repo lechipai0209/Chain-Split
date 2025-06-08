@@ -1,41 +1,51 @@
-use mod anchor::prelude::*;
-use mod crate::state::*;
+use use anchor_lang::prelude::*;
+use crate::state::*;
 
 #[derive(Accounts)]
 pub struct SignExpense<'info> {
     
-    // 欠錢的人
+    #[account(mut)]
     pub signer: Signer<'info>,
 
-    // 田pubkey在event裡面
-    pub group: Acccount<'info, GroupAccount>,
+
+    #[account(mut)]
+    pub expense: Account<'info, ExpenseAccount>,
 }
 
 pub fn handler(
     ctx: Context<SignExpense>, 
-    
-    expense_data: ExpenseData,
-    txid: String,
-    payer: Pubkey, 
-
-    action: Action,
 ) -> Result<()> {
-    let group = &mut ctx.accounts.group;
-    let signer = &mut ctx.accounts.signer;
+    let signer_account = &mut ctx.accounts.signer;
+    let expense_account = &mut ctx.accounts.expense;
 
     // whether this guyy envolves into the transaction
-    require!(group.member.contains(&signer.key()), CustomError::MemberNotInGroup);
+    require!(
+        expense_account.member.contains(&signer_account.key()), 
+        CustomError::MemberNotInGroup
+    );
 
-    emit!(SignExpenseEvent {
-        signer: signer.key(),
-        action: action,
-        payer_txid: txid,
+    let total_expense = 0 ;
+
+    for i in 0..expense_account.member.len() {
+        if expense_account.member[i] == signer_account.key() {
+            expense_account.verified[i] = true;
+            total_expense += expense_account.expense[i];
+        }
+    }// redundent check for preventing same member payment
+
+    emit!(ExpenseSignedEvent {
+        signer: signer_account.key(),
+        expense_account: expense_account.key(),
+        total_expense,
     });
+    
 
     Ok(())
 }
 
-pub enum Action {
-    Accept,
-    Reject,
+#[event]
+pub struct ExpenseSignedEvent {
+    pub signer: Pubkey,
+    pub expense_account: Pubkey,
+    pub total_expense: u32,
 }
