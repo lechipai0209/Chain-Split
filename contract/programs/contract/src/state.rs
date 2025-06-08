@@ -1,40 +1,24 @@
 #[account]  
 pub strcut GroupAccount{ 
-    pub payer: Pubkey,
-    pub name: [u8, 32],
-    pub expense_count: u16, 
-    pub onchain_payment_enabled: bool,
-    pub member: [Pubkey; 8],
-    pub net: [u32; 8],
+    pub payer: Pubkey,          //32
+    pub name: [u8; 32],         //32
+    pub member: [Pubkey; 20],   //32 * 20
+    pub member_name: [u128; 20],     //16 * 20
+    pub net: [u32; 20],         // 4 * 20
 }
+//total = 32 + 32 + 32 * 20 + 16 * 20 + 4 * 20 + 8 = 1112
 
 
-#[event]
-pub struct SignExpenseEvent {
-
-    signer: Pubkey,
-    payer_txid: String,
-    action: Action,
-    
+#[account]
+pub struct ExpenseAccount {
+    pub group: Pubkey,   //32 
+    pub payer: Pubkey,   //32
+    pub amount: u32,     //4
+    pub name: [u8; 32],  //32
+    pub member: [Pubkey; 20], // 32 * 20
+    pub expense: [u32; 20] ,  // 8 * 20
+    pub verified: [bool; 20], // 1 * 20
 }
-
-#[event]
-pub struct Expense {
-    pub group: Pubkey,
-    pub payer: Pubkey,
-    pub amount: u32,
-    pub description: String,
-    pub member: [Pubkey; 8] ;
-    pub expense: [u64; 8] ;
-}
+//total = 32 + 32 + 4 + 32 + 32 * 20 + 4 * 20 +  + 20+  8 = 928-80 = 848
 
 
-#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
-pub struct ExpenseData {
-    pub group: Pubkey,
-    pub payer: Pubkey,
-    pub amount: u64,
-    pub description: String,
-    pub member: [Pubkey; 8] ;
-    pub expense: [u64; 8] ;
-}
