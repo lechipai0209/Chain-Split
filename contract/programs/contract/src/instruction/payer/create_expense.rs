@@ -1,88 +1,119 @@
-use mod anchor_lang::prelude::* ;
-use mod crate::state::* ;
+use anchor_lang::prelude::*;
+use crate::state::*;
+
 
 #[derive(Accounts)]
-pub struct CreateExpense<'info> {
-    
-    // 付錢的倒楣鬼
+pub struct CreateAccount<'info> {
+
+    #[account(mut)]
     pub payer: Signer<'info>,
     
-    // 用來確認到底在不在群組裡(不在的話是來亂的)
+    #[account(
+        init,
+        payer = payer,
+        space = 1200,
+        seeds = [
+            b"expense".as_ref(),
+            payer.key().as_ref(),
+            &nonce.to_le_bytes(),
+        ],
+        bump
+    )]
+    pub expense: Account<'info, ExpenseAccount>,
+
     pub group: Account<'info, GroupAccount>,
-    
+
+    pub system_program: Program<'info, System>,
+
 }
 
+
 pub fn handler(
-    ctx: Context<CreateExpense>, 
-    amount: u64, 
-    description: String,
-    participants: Vec<Pubkey>,
-    expense: Vec<u64>,
+    ctx: Context<CreateAccount>, 
+    name: [u8; 32],
+    member: [Pubkey; 20],
+    expense: [u32; 20],
+    amount: u32,
 ) -> Result<()> {
     
-    let group = &mut ctx.accounts.group;
-    let payer = &mut ctx.accounts.payer;
+    let expense_account = &mut ctx.accounts.expense;
+    let payer_account = &mut ctx.accounts.payer;
+    let group_account = &mut ctx.accounts.group;
 
+    // payer not in group
     require!(
-        participants.len() == expense.len(),
-        CustomError::ExpenseParticipantsMismatch
+        group_account.member.contains(&payer_account.key()),
+        ErrorCode::PayerNotInGroup
     );
 
-    require!(
-        expense.iter().sum() == amount,
-        CustomError::ExpenseMismatch
-    )
-
-    let valid_members : [Pubkey; 8] = group.member ; 
-    
-    //emit container
-    let mut participants_pubkeys: [Pubkey; 8] = [Pubkey::default(); 8];
-    let mut expense_data: [u64; 8] = [0; 8];
-
-    for (i, paricipant_pubkey) in participants.iter().enumerate() {
-
+    // member not in group
+    for m in member.iter() {
         require!(
-            valid_members.contains(paricipant_pubkey),
-            CustomError::MemberNotInGroup
+            group_account.member.contains(m),
+            ErrorCode::ExpenseMemberNotInGroup
         );
-
-        participants_pubkeys[i] = *paricipant_pubkey ;
-        expense_data[i] = expense[i] ;
     }
-    
-    
+
+    // sum doesn't equal to amount
+    let sum: u32 = expense.iter().sum();
     require!(
-        valid_members.contains(payer.key),
-        CustomError::PayerNotInGroup
+        sum == amount as u32,
+        ErrorCode::ExpenseAmountMismatch
     );
 
-    emit!(Expense {
-        group: group.key(),
-        payer: payer.key(),
-        amount,
-        description,
-        participants: participants_pubkeys,
-        expense: expense_data,
+    // expense mismatch
+    for i in 0..expense.len() {
+        if expense[i] > 0 {
+            require!(
+                group_account.member[i] != Pubkey::default(),
+                ErrorCode::NobodyCharged
+            )
+        }
+    }
+
+    expense_account.payer: Pubkey = payer_account.key();
+    expense_account.group: Pubkey = group_account.key();
+    expense_account.name: [u8; 32] = name;
+    expense_account.member: [Pubkey; 20] = member;
+    expense_account.expense: [u32; 20] = expense;
+    expense_account.amount: u32 = amount;
+    expense_account.verified : [bool; 20] = [true; 20];
+
+    for i in 0..verified.len() {
+        if member[i] != Pubkey::default() {
+            expense_account.verified[i] = false;
+        }
+    }
+
+    emit!(ExpenseCreatedEvent {
+        signer: payer_account.key(),
+        expense_account: expense_account.key(),
+        action: "create the expense".to_string(),
     });
 
     Ok(())
 }
-
-
-
+// 有一個nonce 的problem要確認?
 
 #[error_code]
-pub enum CustomError {
+pub enum ErrorCode {
 
-    #[msg("Paricipant number is inconsistent with expense")]
-    ExpenseParticipantsMismatch,
-
-    #[msg("Contain member not in group")]
-    MemberNotInGroup,
-
-    #[msg("Signer not in group")]
+    #[msg("Payer not in group")]
     PayerNotInGroup,
 
-    #[msg("Total expense is not equal to amount")]
-    ExpenseMismatch
+    #[msg("Expense member not in group")]
+    ExpenseMemberNotInGroup,
+
+    #[msg("Expense amount mismatch")]
+    ExpenseAmountMismatch,
+
+    #[msg("Nobody charged")]
+    NobodyCharged,
+}
+
+#[event]
+pub struct ExpenseCreatedEvent {
+    signer: Pubkey,
+    expense_account: Pubkey,
+    action: String,
 }
