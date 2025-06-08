@@ -25,8 +25,13 @@ pub fn handler(
 
     require!(
         participants.len() == expense.len(),
-        CustomError::ExpenseMismatch
+        CustomError::ExpenseParticipantsMismatch
     );
+
+    require!(
+        expense.iter().sum() == amount,
+        CustomError::ExpenseMismatch
+    )
 
     let valid_members : [Pubkey; 8] = group.member ; 
     
@@ -70,11 +75,14 @@ pub fn handler(
 pub enum CustomError {
 
     #[msg("Paricipant number is inconsistent with expense")]
-    ExpenseMismatch,
+    ExpenseParticipantsMismatch,
 
     #[msg("Contain member not in group")]
     MemberNotInGroup,
 
     #[msg("Signer not in group")]
     PayerNotInGroup,
+
+    #[msg("Total expense is not equal to amount")]
+    ExpenseMismatch
 }
