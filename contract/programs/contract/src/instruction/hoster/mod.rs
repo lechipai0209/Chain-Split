@@ -1,2 +1,3 @@
 pub mod create_group ;
-pub mod update_group_member;
+pub mod remove_group_member;
+pub mod close_group ;
