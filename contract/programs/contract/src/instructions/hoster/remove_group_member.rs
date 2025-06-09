@@ -13,7 +13,7 @@ pub struct RemoveGroupMember<'info> {
 }
 
 
-pub fn handler(
+pub fn remove_group_member_handler(
     ctx: Context<RemoveGroupMember>, 
     member_pubkey: Pubkey 
 ) -> Result<()> {

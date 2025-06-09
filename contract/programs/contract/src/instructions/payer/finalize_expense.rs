@@ -17,7 +17,7 @@ pub struct FinalizeExpense<'info> {
 }
 
 
-pub fn handler(
+pub fn finalize_expense_handler(
     ctx: Context<FinalizeExpense>, 
 ) -> Result<()> {
     

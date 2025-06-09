@@ -1,9 +1,22 @@
 pub mod state ;
 pub mod instructions ;
 
-use crate::state::* ;
-use crate::instructions::* ;
 use anchor_lang::prelude::*;
+
+use crate::state::* ;
+use crate::instructions::hoster::create_group::* ;
+use crate::instructions::hoster::close_group::* ;
+use crate::instructions::hoster::remove_group_member::* ;
+
+use crate::instructions::member::join_group::* ;
+use crate::instructions::member::sign_expense::* ;
+use crate::instructions::member::pay_with_usd::* ;
+use crate::instructions::member::pay_with_usdt::* ;
+
+use crate::instructions::payer::create_expense::* ;
+use crate::instructions::payer::close_expense::* ;
+use crate::instructions::payer::confirm_usd::* ;
+use crate::instructions::payer::finalize_expense::* ;
 
 declare_id!("Guq3MeZzkf5CiSK7wFBm7VzKSreSiccjz7kbJpH2boW9");
 
@@ -12,14 +25,15 @@ pub mod contract {
     use super::*;
 
 // hoster side
-    // pub fn create_group(
-    //     ctx: Context<hoster::create_group::CreateGroup>, 
-    //     group_name: [u8; 32], 
-    //     hoster_name: u128,
-    //     nonce: u64,
-    // ) -> Result<()> {
-    //     hoster::create_group::handler(ctx, group_name, hoster_name, nonce)
-    // } 
+    pub fn create_group(
+        ctx: Context<CreateGroup>, 
+        group_name: [u8; 32], 
+        hoster_name: u128,
+        nonce: u64,
+    ) -> Result<()> {
+        
+        create_group_handler(ctx, group_name, hoster_name, nonce)
+    } 
 
 //     pub fn remove_group_member(
 //         ctx: Context<RemoveGroupMember>, 

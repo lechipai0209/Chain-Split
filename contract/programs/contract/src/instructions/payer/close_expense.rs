@@ -18,7 +18,7 @@ pub struct CloseExpense<'info> {
 }
 
 
-pub fn handler(ctx: Context<CloseExpense>) -> Result<()> {
+pub fn close_expense_handler(ctx: Context<CloseExpense>) -> Result<()> {
     
     let expense_account = &mut ctx.accounts.expense;
     let signer_account = &mut ctx.accounts.signer;

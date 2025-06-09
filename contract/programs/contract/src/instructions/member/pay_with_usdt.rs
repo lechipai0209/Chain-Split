@@ -27,7 +27,7 @@ pub struct PayWithUsdt<'info> {
     )]
     pub from_token_account: Account<'info, TokenAccount>,
 
-    // CHECK : No need to vertify, only derive ATA
+    /// CHECK: No need to vertify, only derive ATA
     pub recipient: AccountInfo<'info>,
 
     #[account(
@@ -44,7 +44,7 @@ pub struct PayWithUsdt<'info> {
 
 }
 
-pub fn handler(
+pub fn pay_with_usdthandler(
     ctx: Context<PayWithUsdt>, 
     amount: u32,
 ) -> Result<()> {

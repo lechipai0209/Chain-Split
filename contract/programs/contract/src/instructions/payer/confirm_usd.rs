@@ -13,7 +13,7 @@ pub struct ConfirmUsd<'info> {
 
 }
 
-pub fn handler(ctx: Context<ConfirmUsd>) -> Result<()> {
+pub fn confirm_usd_handler(ctx: Context<ConfirmUsd>) -> Result<()> {
     
     let payment_account = &mut ctx.accounts.payment;
     let signer_account = &mut ctx.accounts.signer;

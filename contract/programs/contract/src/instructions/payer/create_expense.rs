@@ -28,7 +28,7 @@ pub struct CreateAccount<'info> {
 }
 
 
-pub fn handler(
+pub fn create_expense_handler(
     ctx: Context<CreateAccount>, 
     name: [u8; 32],
     member: [Pubkey; 20],

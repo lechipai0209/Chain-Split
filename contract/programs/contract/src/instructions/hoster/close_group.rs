@@ -18,7 +18,7 @@ pub struct CloseGroup<'info> {
 }
 
 
-pub fn handler(ctx: Context<CloseGroup>) -> Result<()> {
+pub fn close_group_handler(ctx: Context<CloseGroup>) -> Result<()> {
     
     let group_account = &mut ctx.accounts.group;
     let signer_account = &mut ctx.accounts.signer;

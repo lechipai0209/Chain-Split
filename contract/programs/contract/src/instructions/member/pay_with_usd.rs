@@ -20,7 +20,7 @@ pub struct PayWithUsd<'info> {
     )]
     pub payment: Account<'info, PaymentAccount>,
 
-    // CHECK : No need to vertify, only for log
+    /// CHECK: No need to vertify, only for log
     pub recipient: AccountInfo<'info>,
 
     pub group: Account<'info, GroupAccount>,
@@ -28,7 +28,7 @@ pub struct PayWithUsd<'info> {
     pub system_program: Program<'info, System>,
 }
 
-pub fn handler(
+pub fn pay_with_usd_handler(
     ctx: Context<PayWithUsd>, 
     amount: u32,
     nonce: u64,

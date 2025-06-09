@@ -12,7 +12,7 @@ pub struct SignExpense<'info> {
     pub expense: Account<'info, ExpenseAccount>,
 }
 
-pub fn handler(
+pub fn sign_expense_handler(
     ctx: Context<SignExpense>, 
 ) -> Result<()> {
     let signer_account = &mut ctx.accounts.signer;

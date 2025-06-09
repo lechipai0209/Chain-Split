@@ -25,7 +25,7 @@ pub struct CreateGroup<'info> {
 }
 
 
-pub fn handler(
+pub fn create_group_handler(
     ctx: Context<CreateGroup>, 
     group_name: [u8; 32], 
     hoster_name: u128,
