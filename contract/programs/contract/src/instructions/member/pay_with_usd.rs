@@ -31,6 +31,7 @@ pub struct PayWithUsd<'info> {
 pub fn handler(
     ctx: Context<PayWithUsd>, 
     amount: u32,
+    nonce: u64,
 ) -> Result<()> {
     let payer_account = &mut ctx.accounts.payer;
     let recipient_account = &mut ctx.accounts.recipient;

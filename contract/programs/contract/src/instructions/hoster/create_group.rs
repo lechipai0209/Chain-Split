@@ -15,7 +15,7 @@ pub struct CreateGroup<'info> {
         space = 1304,
         seeds = [
             b"group", 
-            &nonce.to_le_bytes()
+            &nonce.to_le_bytes()[..5],
         ],
         bump
     )]
@@ -29,6 +29,7 @@ pub fn handler(
     ctx: Context<CreateGroup>, 
     group_name: [u8; 32], 
     hoster_name: u128,
+    nonce: u64,
 ) -> Result<()> {
     
     let group_account = &mut ctx.accounts.group;

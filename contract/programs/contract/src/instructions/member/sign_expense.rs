@@ -24,7 +24,7 @@ pub fn handler(
         CustomError::MemberNotInExpense
     );
 
-    let total_expense = 0 ;
+    let mut total_expense = 0 ;
 
     for i in 0..expense_account.member.len() {
         if expense_account.member[i] == signer_account.key() {

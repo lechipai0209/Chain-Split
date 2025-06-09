@@ -34,6 +34,7 @@ pub fn handler(
     member: [Pubkey; 20],
     expense: [u32; 20],
     amount: u32,
+    nonce: u64,
 ) -> Result<()> {
     
     let expense_account = &mut ctx.accounts.expense;
