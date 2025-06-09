@@ -3,7 +3,6 @@ use crate::state::*;
 
 
 #[derive(Accounts)]
-#[instruction(nonce: u64)]
 pub struct RemoveGroupMember<'info> {
 
     #[account(mut)] // change on-chain data -> charge fee
