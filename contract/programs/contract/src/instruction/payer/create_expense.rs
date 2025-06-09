@@ -15,7 +15,7 @@ pub struct CreateAccount<'info> {
         space = 1000,
         seeds = [
             b"expense",
-            &nonce.to_le_bytes(),
+            &nonce.to_le_bytes()[..7],
         ],
         bump
     )]
@@ -71,16 +71,16 @@ pub fn handler(
         }
     }
 
-    expense_account.payer: Pubkey = payer_account.key();
-    expense_account.group: Pubkey = group_account.key();
-    expense_account.name: [u8; 32] = name;
-    expense_account.member: [Pubkey; 20] = member;
-    expense_account.expense: [u32; 20] = expense;
-    expense_account.amount: u32 = amount;
-    expense_account.verified : [bool; 20] = [true; 20];
-    expense_account.finalized : bool = false;
+    expense_account.payer = payer_account.key();
+    expense_account.group = group_account.key();
+    expense_account.name = name;
+    expense_account.member = member;
+    expense_account.expense = expense;
+    expense_account.amount = amount;
+    expense_account.verified = [true; 20];
+    expense_account.finalized = false;
 
-    for i in 0..verified.len() {
+    for i in 0..expense_account.verified.len() {
         if member[i] != Pubkey::default() {
             expense_account.verified[i] = false;
         }

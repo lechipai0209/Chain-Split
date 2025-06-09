@@ -19,14 +19,14 @@ pub fn handler(
 ) -> Result<()> {
     
     let group_account = &mut ctx.accounts.group;
-    let signer_account = &mut ctx.accounts.payer;
+    let signer_account = &mut ctx.accounts.signer;
 
     require!(group_account.payer == signer_account.key(), ErrorCode::Unauthorized);
     require!(member_pubkey != Pubkey::default(), ErrorCode::InvalidPubkey);
     require!(member_pubkey != group_account.payer.key(), ErrorCode::CouldNotRemovePayer);
 
     for i in 0..group_account.member.len() {
-        if group_account.member[i] == &member_pubkey {
+        if group_account.member[i] == member_pubkey {
             if group_account.net[i] == 0 {
                 group_account.member[i] = Pubkey::default();
                 group_account.member_name[i] = 0;
@@ -60,10 +60,10 @@ pub enum ErrorCode {
     NotMember,
 
     #[msg("Empty pubkey")]
-    InvalidPubkey
+    InvalidPubkey,
 
     #[msg("Could not remove payer")]
-    CouldNotRemovePayer
+    CouldNotRemovePayer,
 
 }
 

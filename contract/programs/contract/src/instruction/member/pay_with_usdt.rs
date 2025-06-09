@@ -6,7 +6,7 @@ use anchor_spl::token::{
     Transfer, 
     transfer
 };
-
+use crate::state::*;
 use anchor_spl::associated_token::get_associated_token_address;
 
 #[derive(Accounts)]
@@ -67,13 +67,13 @@ pub fn handler(
     
     let cpi_ctx = CpiContext::new(cpi_program, cpi_accounts);
     
-    transfer(cpi_ctx, amount)?;
+    transfer(cpi_ctx, amount as u64)?;
 
     group_account.net[group_account.member.iter()
-    .position(|x| x == &recipient_account.key()).unwrap()] += amount;
+    .position(|x| x == &recipient_account.key()).unwrap()] += amount as i32;
     
     group_account.net[group_account.member.iter()
-    .position(|x| x == &payer_account.key()).unwrap()] -= amount;
+    .position(|x| x == &payer_account.key()).unwrap()] -= amount as i32;
 
     emit!(PayWithUsdtEvent {
         group: group_account.key(),

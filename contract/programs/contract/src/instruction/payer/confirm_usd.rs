@@ -1,4 +1,4 @@
-use use anchor_lang::prelude::*;
+use anchor_lang::prelude::*;
 use crate::state::*;
 
 
@@ -26,7 +26,7 @@ pub fn handler(ctx: Context<ConfirmUsd>) -> Result<()> {
     payment_account.verified = true;
 
     emit!(PaymentConfirmedEvent {
-        group: payer_account.group ,
+        group: payment_account.group ,
         payer: payment_account.payer,
         recipient: signer_account.key(),
         amount: payment_account.amount,
@@ -37,7 +37,7 @@ pub fn handler(ctx: Context<ConfirmUsd>) -> Result<()> {
 
 }
 
-#[err_code]
+#[error_code]
 pub enum ErrorCode {
     #[msg("Not the recipient of the payment")]
     Unauthorized,

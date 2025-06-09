@@ -1,4 +1,4 @@
-use use anchor_lang::prelude::*;
+use anchor_lang::prelude::*;
 use crate::state::*;
 
 #[derive(Accounts)]

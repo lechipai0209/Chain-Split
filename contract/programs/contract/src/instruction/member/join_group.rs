@@ -16,7 +16,7 @@ pub struct JoinGroup<'info> {
 pub fn handler(ctx: Context<JoinGroup>, name: u128 ) -> Result<()> {
     
     let group_account = &mut ctx.accounts.group;
-    let signer_account = &mut ctx.accounts.payer;
+    let signer_account = &mut ctx.accounts.signer;
 
 
     for existing in group_account.member.iter() {

@@ -1,4 +1,4 @@
-use use anchor_lang::prelude::*;
+use anchor_lang::prelude::*;
 use crate::state::*;
 
 
@@ -14,7 +14,7 @@ pub struct PayWithUsd<'info> {
         space = 200,
         seeds = [
             b"payment", 
-            &nonce.to_le_bytes(),
+            &nonce.to_le_bytes()[..7],
         ],
         bump
     )]
@@ -24,6 +24,8 @@ pub struct PayWithUsd<'info> {
     pub recipient: AccountInfo<'info>,
 
     pub group: Account<'info, GroupAccount>,
+
+    pub system_program: Program<'info, System>,
 }
 
 pub fn handler(
@@ -55,7 +57,7 @@ pub fn handler(
 }
 
 
-#[err_code]
+#[error_code]
 pub enum ErrorCode {
 
     #[msg("Member not in group")]

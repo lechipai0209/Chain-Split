@@ -1,5 +1,7 @@
+use anchor_lang::prelude::*;
+
 #[account]  
-pub strcut GroupAccount{ 
+pub struct GroupAccount{ 
     pub payer: Pubkey,          //32
     pub name: [u8; 32],         //32
     pub member: [Pubkey; 20],   //32 * 20
@@ -28,5 +30,5 @@ pub struct PaymentAccount {
     pub payer: Pubkey,    //32
     pub recipient: Pubkey,//32
     pub amount: u32,      //4
-    pub vertified: bool,  //1
+    pub verified: bool,  //1
 }

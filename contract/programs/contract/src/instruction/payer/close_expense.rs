@@ -23,10 +23,10 @@ pub fn handler(ctx: Context<CloseExpense>) -> Result<()> {
     let expense_account = &mut ctx.accounts.expense;
     let signer_account = &mut ctx.accounts.signer;
 
-    reuqire!(
+    require!(
         expense_account.payer == signer_account.key(), 
         ErrorCode::Unauthorized
-    )
+    ) ;
 
     emit!(ExpenseClosedEvent {
         signer: signer_account.key(),

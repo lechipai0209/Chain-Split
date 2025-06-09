@@ -25,10 +25,10 @@ pub fn handler(
     let signer_account = &mut ctx.accounts.signer;
     let group_account = &mut ctx.accounts.group;
 
-    reuqire!(
+    require!(
         expense_account.payer == signer_account.key(), 
         ErrorCode::Unauthorized
-    )
+    ) ;
 
     require!(
         expense_account.verified.iter().all(|v| *v),
@@ -36,7 +36,7 @@ pub fn handler(
     ) ;
 
     require!(
-        group_account.finalized == false, 
+        expense_account.finalized == false, 
         ErrorCode::AlreadyFinalized
     ) ;
 
@@ -48,10 +48,10 @@ pub fn handler(
         // 記錄扣款
         if let Some(group_index) = group_account.member.iter().position(|x| x == member_key) {
 
-            group_account.net[group_index] -= expense_account.expense[i];
+            group_account.net[group_index] -= expense_account.expense[i] as i32;
             
             if member_key == &expense_account.payer {
-                group_account.net[group_index] += expense_account.amount;
+                group_account.net[group_index] += expense_account.amount as i32;
             }    
         }
     }

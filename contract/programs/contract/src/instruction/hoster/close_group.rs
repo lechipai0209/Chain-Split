@@ -23,7 +23,7 @@ pub fn handler(ctx: Context<CloseGroup>) -> Result<()> {
     let group_account = &mut ctx.accounts.group;
     let signer_account = &mut ctx.accounts.signer;
 
-    let sum : u32 = group_account.iter().sum() ;
+    let sum : i32 = group_account.net.iter().sum() ;
     require!(sum == 0, ErrorCode::Unsettled);
 
     Ok(())
