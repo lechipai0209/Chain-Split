@@ -3,6 +3,7 @@ use crate::state::*;
 
 
 #[derive(Accounts)]
+#[instruction(nonce: u64)]
 pub struct RemoveGroupMember<'info> {
 
     #[account(mut)] // change on-chain data -> charge fee
@@ -22,6 +23,8 @@ pub fn handler(
     let signer_account = &mut ctx.accounts.payer;
 
     require!(group_account.payer == signer_account.key(), ErrorCode::Unauthorized);
+    require!(member_pubkey != Pubkey::default(), ErrorCode::InvalidPubkey);
+    require!(member_pubkey != group_account.payer.key(), ErrorCode::CouldNotRemovePayer);
 
     for i in 0..group_account.member.len() {
         if group_account.member[i] == &member_pubkey {
@@ -56,6 +59,12 @@ pub enum ErrorCode {
     
     #[msg("User is not in the group")]
     NotMember,
+
+    #[msg("Empty pubkey")]
+    InvalidPubkey
+
+    #[msg("Could not remove payer")]
+    CouldNotRemovePayer
 
 }
 

@@ -3,6 +3,7 @@ use crate::state::*;
 
 
 #[derive(Accounts)]
+#[instruction(nonce: u64)]
 pub struct CreateAccount<'info> {
 
     #[account(mut)]
@@ -11,10 +12,9 @@ pub struct CreateAccount<'info> {
     #[account(
         init,
         payer = payer,
-        space = 1200,
+        space = 1000,
         seeds = [
-            b"expense".as_ref(),
-            payer.key().as_ref(),
+            b"expense",
             &nonce.to_le_bytes(),
         ],
         bump
@@ -67,7 +67,7 @@ pub fn handler(
             require!(
                 group_account.member[i] != Pubkey::default(),
                 ErrorCode::NobodyCharged
-            )
+            ) ;
         }
     }
 
@@ -78,6 +78,7 @@ pub fn handler(
     expense_account.expense: [u32; 20] = expense;
     expense_account.amount: u32 = amount;
     expense_account.verified : [bool; 20] = [true; 20];
+    expense_account.finalized : bool = false;
 
     for i in 0..verified.len() {
         if member[i] != Pubkey::default() {
@@ -93,7 +94,7 @@ pub fn handler(
 
     Ok(())
 }
-// 有一個nonce 的problem要確認?
+
 
 #[error_code]
 pub enum ErrorCode {

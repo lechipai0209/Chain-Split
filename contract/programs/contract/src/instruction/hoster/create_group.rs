@@ -3,6 +3,7 @@ use crate::state::*;
 
 
 #[derive(Accounts)]
+#[instruction(nonce: u64)]
 pub struct CreateGroup<'info> {
     
     #[account(mut)]
@@ -13,8 +14,7 @@ pub struct CreateGroup<'info> {
         payer = payer,
         space = 1304,
         seeds = [
-            b"group".as_ref(), 
-            payer.key().as_ref(), 
+            b"group", 
             &nonce.to_le_bytes()
         ],
         bump
@@ -25,7 +25,11 @@ pub struct CreateGroup<'info> {
 }
 
 
-pub fn handler(ctx: Context<CreateGroup>, group_name: [u8; 32], hoster_name: u128) -> Result<()> {
+pub fn handler(
+    ctx: Context<CreateGroup>, 
+    group_name: [u8; 32], 
+    hoster_name: u128,
+) -> Result<()> {
     
     let group_account = &mut ctx.accounts.group;
     let payer_account = &mut ctx.accounts.payer;

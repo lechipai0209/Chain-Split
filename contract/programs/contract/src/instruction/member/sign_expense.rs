@@ -18,10 +18,10 @@ pub fn handler(
     let signer_account = &mut ctx.accounts.signer;
     let expense_account = &mut ctx.accounts.expense;
 
-    // whether this guyy envolves into the transaction
+    // whether this guy envolves into the transaction
     require!(
         expense_account.member.contains(&signer_account.key()), 
-        CustomError::MemberNotInGroup
+        CustomError::MemberNotInExpense
     );
 
     let total_expense = 0 ;
@@ -48,4 +48,11 @@ pub struct ExpenseSignedEvent {
     pub signer: Pubkey,
     pub expense_account: Pubkey,
     pub total_expense: u32,
+}
+
+
+#[error_code]
+pub enum CustomError {
+    #[msg("Member not in expense")]
+    MemberNotInExpense,
 }
