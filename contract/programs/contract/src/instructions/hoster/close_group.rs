@@ -23,8 +23,14 @@ pub fn close_group_handler(ctx: Context<CloseGroup>) -> Result<()> {
     let group_account = &mut ctx.accounts.group;
     let signer_account = &mut ctx.accounts.signer;
 
-    let sum : i32 = group_account.net.iter().sum() ;
-    require!(sum == 0, ErrorCode::Unsettled);
+    let has_nonzero = group_account.net.iter().any(|&x| x != 0);
+    require!(!has_nonzero, ErrorCode::Unsettled);
+
+    emit!(GroupClosedEvent {
+        signer: signer_account.key().to_string(),
+        group_account: group_account.key().to_string(),
+        action: "close the group".to_string(),
+    });
 
     Ok(())
 }
@@ -33,11 +39,18 @@ pub fn close_group_handler(ctx: Context<CloseGroup>) -> Result<()> {
 #[error_code]
 pub enum ErrorCode {
 
-    #[msg("Net array doesn't sum to 0")]
+    #[msg("Net array contains non-zero values")]
     Unsettled,
 
     #[msg("Not the payer of the group")]
     Unauthorized
 
+}
+
+#[event]
+pub struct GroupClosedEvent {
+    signer: String,
+    group_account: String,
+    action: String,
 }
 

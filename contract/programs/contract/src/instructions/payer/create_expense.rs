@@ -3,8 +3,8 @@ use crate::state::*;
 
 
 #[derive(Accounts)]
-#[instruction(nonce: u64)]
-pub struct CreateAccount<'info> {
+#[instruction(nonce: [u8; 7])]
+pub struct CreateExpense<'info> {
 
     #[account(mut)]
     pub payer: Signer<'info>,
@@ -15,7 +15,7 @@ pub struct CreateAccount<'info> {
         space = 1000,
         seeds = [
             b"expense",
-            &nonce.to_le_bytes()[..7],
+            &[1,2,3,4,5,6,7],
         ],
         bump
     )]
@@ -29,12 +29,12 @@ pub struct CreateAccount<'info> {
 
 
 pub fn create_expense_handler(
-    ctx: Context<CreateAccount>, 
+    ctx: Context<CreateExpense>, 
     name: [u8; 32],
     member: [Pubkey; 20],
     expense: [u32; 20],
     amount: u32,
-    nonce: u64,
+    nonce: [u8; 7],
 ) -> Result<()> {
     
     let expense_account = &mut ctx.accounts.expense;
@@ -82,14 +82,15 @@ pub fn create_expense_handler(
     expense_account.finalized = false;
 
     for i in 0..expense_account.verified.len() {
-        if member[i] != Pubkey::default() {
+        if member[i] != Pubkey::default() && member[i] != payer_account.key() {
             expense_account.verified[i] = false;
         }
+        
     }
 
     emit!(ExpenseCreatedEvent {
-        signer: payer_account.key(),
-        expense_account: expense_account.key(),
+        signer: payer_account.key().to_string(),
+        expense_account: expense_account.key().to_string(),
         action: "create the expense".to_string(),
     });
 
@@ -115,7 +116,7 @@ pub enum ErrorCode {
 
 #[event]
 pub struct ExpenseCreatedEvent {
-    signer: Pubkey,
-    expense_account: Pubkey,
+    signer: String,
+    expense_account: String,
     action: String,
 }

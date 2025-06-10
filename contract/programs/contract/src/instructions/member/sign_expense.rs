@@ -14,6 +14,7 @@ pub struct SignExpense<'info> {
 
 pub fn sign_expense_handler(
     ctx: Context<SignExpense>, 
+    verified: bool
 ) -> Result<()> {
     let signer_account = &mut ctx.accounts.signer;
     let expense_account = &mut ctx.accounts.expense;
@@ -28,14 +29,15 @@ pub fn sign_expense_handler(
 
     for i in 0..expense_account.member.len() {
         if expense_account.member[i] == signer_account.key() {
-            expense_account.verified[i] = true;
+            expense_account.verified[i] = verified;
             total_expense += expense_account.expense[i];
         }
     }// redundent check for preventing same member payment
 
     emit!(ExpenseSignedEvent {
-        signer: signer_account.key(),
-        expense_account: expense_account.key(),
+        signer: signer_account.key().to_string(),
+        verified,
+        expense_account: expense_account.key().to_string(),
         total_expense,
     });
     
@@ -45,8 +47,9 @@ pub fn sign_expense_handler(
 
 #[event]
 pub struct ExpenseSignedEvent {
-    pub signer: Pubkey,
-    pub expense_account: Pubkey,
+    pub signer: String,
+    pub verified: bool,
+    pub expense_account: String,
     pub total_expense: u32,
 }
 

@@ -32,9 +32,9 @@ pub fn remove_group_member_handler(
                 group_account.member_name[i] = 0;
 
                 emit!(GroupMemberRemovedEvent {
-                    signer: signer_account.key(),
-                    member: member_pubkey,
-                    group_account: group_account.key(),
+                    signer: signer_account.key().to_string(),
+                    member: member_pubkey.to_string(),
+                    group_account: group_account.key().to_string(),
                     action: "remove the group member".to_string(),
                 });
                 return Ok(());
@@ -69,9 +69,9 @@ pub enum ErrorCode {
 
 #[event]
 pub struct GroupMemberRemovedEvent {
-    signer: Pubkey,
-    member: Pubkey,
-    group_account: Pubkey,
+    signer: String,
+    member: String,
+    group_account: String,
     action: String,
 }
 

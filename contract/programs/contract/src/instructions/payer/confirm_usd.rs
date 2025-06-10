@@ -25,10 +25,12 @@ pub fn confirm_usd_handler(ctx: Context<ConfirmUsd>) -> Result<()> {
 
     payment_account.verified = true;
 
+    // 這邊要impl group account 的邏輯
+
     emit!(PaymentConfirmedEvent {
-        group: payment_account.group ,
-        payer: payment_account.payer,
-        recipient: signer_account.key(),
+        group: payment_account.group.to_string() ,
+        payer: payment_account.payer.to_string(),
+        recipient: signer_account.key().to_string(),
         amount: payment_account.amount,
         action: "confirm the payment".to_string(),
     });
@@ -45,9 +47,9 @@ pub enum ErrorCode {
 
 #[event]
 pub struct PaymentConfirmedEvent {
-    pub group: Pubkey,
-    pub payer: Pubkey,
-    pub recipient: Pubkey,
+    pub group: String,
+    pub payer: String,
+    pub recipient: String,
     pub amount: u32,
     pub action: String,
 }

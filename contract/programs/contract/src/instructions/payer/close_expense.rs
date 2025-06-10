@@ -29,8 +29,8 @@ pub fn close_expense_handler(ctx: Context<CloseExpense>) -> Result<()> {
     ) ;
 
     emit!(ExpenseClosedEvent {
-        signer: signer_account.key(),
-        expense_account: expense_account.key(),
+        signer: signer_account.key().to_string(),
+        expense_account: expense_account.key().to_string(),
         action: "close the expense".to_string(),
     });
     
@@ -46,7 +46,7 @@ pub enum ErrorCode {
 
 #[event]
 pub struct ExpenseClosedEvent {
-    signer: Pubkey,
-    expense_account: Pubkey,
+    signer: String,
+    expense_account: String,
     action: String,
 }

@@ -31,8 +31,8 @@ pub fn join_group_handler(ctx: Context<JoinGroup>, name: u128 ) -> Result<()> {
             group_account.member_name[i] = name;
 
             emit!(MemberJoinedEvent {
-                signer: signer_account.key(),
-                group_account: group_account.key(),
+                signer: signer_account.key().to_string(),
+                group_account: group_account.key().to_string(),
                 action: "join the group".to_string(),
             });
             
@@ -55,8 +55,8 @@ pub enum ErrorCode {
 
 #[event]
 pub struct MemberJoinedEvent {
-    pub signer: Pubkey,
-    pub group_account: Pubkey,
+    pub signer: String,
+    pub group_account: String,
     pub action: String,
 }
 

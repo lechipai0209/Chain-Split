@@ -44,7 +44,7 @@ pub struct PayWithUsdt<'info> {
 
 }
 
-pub fn pay_with_usdthandler(
+pub fn pay_with_usdt_handler(
     ctx: Context<PayWithUsdt>, 
     amount: u32,
 ) -> Result<()> {
@@ -78,9 +78,9 @@ pub fn pay_with_usdthandler(
     group_account.net[payer_index] -= amount as i32;
 
     emit!(PayWithUsdtEvent {
-        group: group_account.key(),
-        signer: payer_account.key(),
-        recipient: recipient_account.key(),
+        group: group_account.key().to_string(),
+        signer: payer_account.key().to_string(),
+        recipient: recipient_account.key().to_string(),
         amount: amount,
         action: "pay with USDT".to_string(),
     });
@@ -113,9 +113,9 @@ pub enum ErrorCode {
 
 #[event]
 pub struct PayWithUsdtEvent {
-    pub group: Pubkey,
-    pub signer: Pubkey,
-    pub recipient: Pubkey,
+    pub group: String,
+    pub signer: String,
+    pub recipient: String,
     pub amount: u32,
     pub action: String,
 }
