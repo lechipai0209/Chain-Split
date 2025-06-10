@@ -38,7 +38,11 @@ describe("contract", () => {
     const latest = await provider.connection.getTransaction(txSig, {
       commitment: "confirmed",
     });
-    console.log("Latest blockhash:", latest);
+
+    const parser = new anchor.EventParser(program.programId, program.coder);
+
+    let a = Array.from(parser.parseLogs(latest.meta.logMessages)) ;
+    console.log(a[0]) ;
 
 
   })
