@@ -15,7 +15,7 @@ pub struct CreateExpense<'info> {
         space = 1000,
         seeds = [
             b"expense",
-            &[1,2,3,4,5,6,7],
+            &nonce,
         ],
         bump
     )]
@@ -30,11 +30,11 @@ pub struct CreateExpense<'info> {
 
 pub fn create_expense_handler(
     ctx: Context<CreateExpense>, 
+    nonce: [u8; 7],
     name: [u8; 32],
     member: [Pubkey; 20],
     expense: [u32; 20],
     amount: u32,
-    nonce: [u8; 7],
 ) -> Result<()> {
     
     let expense_account = &mut ctx.accounts.expense;

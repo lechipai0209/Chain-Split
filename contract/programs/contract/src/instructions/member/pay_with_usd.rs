@@ -14,7 +14,7 @@ pub struct PayWithUsd<'info> {
         space = 200,
         seeds = [
             b"payment", 
-            &[1,2,3,4,5,6,7],
+            &nonce,
         ],
         bump
     )]
@@ -30,8 +30,8 @@ pub struct PayWithUsd<'info> {
 
 pub fn pay_with_usd_handler(
     ctx: Context<PayWithUsd>, 
-    amount: u32,
     nonce: [u8; 7],
+    amount: u32,
 ) -> Result<()> {
     let payer_account = &mut ctx.accounts.payer;
     let recipient_account = &mut ctx.accounts.recipient;

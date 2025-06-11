@@ -3,3 +3,6 @@
    我的program生成的。而我的program只能依據我定義的handler
    去生成pda，無法私自偽造格式(譬如說用A帳號創建，但是payer寫
    B帳號)，所以可以用我們自己定義的邏輯來檢查合理性。
+
+2. #nonce 這種會被放到#[instruction(nonce: [u8; 7])] 的參數要放在第一個!!!
+   位置關係很重要

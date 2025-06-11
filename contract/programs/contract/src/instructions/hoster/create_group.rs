@@ -15,7 +15,7 @@ pub struct CreateGroup<'info> {
         space = 1304,
         seeds = [
             b"group", 
-            &[1,2,3,4,5],         // TODO: this is is suspecious. It won't work if use &nonce
+            &nonce[..],       
         ],
         bump
     )]
@@ -27,9 +27,9 @@ pub struct CreateGroup<'info> {
 
 pub fn create_group_handler(
     ctx: Context<CreateGroup>, 
+    nonce: [u8; 5],
     group_name: [u8; 32], 
     hoster_name: u128,
-    nonce: [u8; 5],
 ) -> Result<()> {
     let group_account = &mut ctx.accounts.group;
     let payer_account = &mut ctx.accounts.payer;

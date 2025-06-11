@@ -57,7 +57,7 @@ describe("contract", () => {
     const hosterName = new anchor.BN(1234567890123456);
 
     let txSig = await program.methods
-      .createGroup(groupName, hosterName, [1,2,3,4,5])
+      .createGroup([1,2,3,4,5], groupName, hosterName)
       .accounts({
         group: groupPda,
         payer: myWallet.publicKey,
@@ -151,11 +151,11 @@ describe("contract", () => {
 
     txSig = await program.methods
     .createExpense(
+      [1,2,3,4,5,6,7],
       Array.from(Buffer.from("MY test".padEnd(32, "\0"), "utf8")),
       memberPubkeys,
       expenseArray,
       90, 
-      [1,2,3,4,5,6,7],
     )
     .accounts({
       payer: myWallet.publicKey,
@@ -243,7 +243,7 @@ describe("contract", () => {
 
     
     txSig = await program.methods
-    .payWithUsd(80, [1,2,3,4,5,6,7])
+    .payWithUsd([1,2,3,4,5,6,7], 80)
     .accounts({
       payer: user.publicKey,
       recipient: myWallet.publicKey,

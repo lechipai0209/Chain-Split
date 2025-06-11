@@ -27,12 +27,12 @@ pub mod contract {
 // hoster side
     pub fn create_group(
         ctx: Context<CreateGroup>, 
+        nonce: [u8; 5],
         group_name: [u8; 32], 
         hoster_name: u128,
-        nonce: [u8; 5],
     ) -> Result<()> {
         
-        create_group_handler(ctx, group_name, hoster_name, nonce)
+        create_group_handler(ctx, nonce, group_name, hoster_name)
     } 
 
     pub fn remove_group_member(
@@ -65,10 +65,10 @@ pub mod contract {
 
     pub fn pay_with_usd(
         ctx: Context<PayWithUsd>, 
+        nonce: [u8; 7],
         amount: u32,
-        nonce: [u8; 7]
     ) -> Result<()> {
-        pay_with_usd_handler(ctx, amount, nonce)
+        pay_with_usd_handler(ctx, nonce, amount)
     }
 
     pub fn pay_with_usdt(
@@ -93,13 +93,13 @@ pub mod contract {
 
     pub fn create_expense(
         ctx: Context<CreateExpense>, 
+        nonce: [u8; 7],
         name: [u8; 32],
         member: [Pubkey; 20],
         expense: [u32; 20],
         amount: u32,
-        nonce: [u8; 7]
     ) -> Result<()> {
-        create_expense_handler(ctx, name, member, expense, amount, nonce)
+        create_expense_handler(ctx, nonce, name, member, expense, amount)
     }
 
     pub fn finalize_expense(
