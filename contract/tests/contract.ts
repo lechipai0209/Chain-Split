@@ -267,7 +267,8 @@ describe("contract", () => {
     .confirmUsd()
     .accounts({
       signer: myWallet.publicKey,
-      payment: paymentPda
+      payment: paymentPda,
+      group: groupPda
     })
     .signers([])
     .rpc();
@@ -281,6 +282,8 @@ describe("contract", () => {
     console.log("this is confirm usd : ", confirmUsdLog[0], "\n") ;
 
 
+
+    
 // close group
     txSig = await program.methods
     .closeGroup()
