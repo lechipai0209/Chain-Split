@@ -34,6 +34,9 @@ const styles = StyleSheet.create({
         fontSize: SIZES.medium,
         fontWeight: "bold",
     },
+    transactionMovement: {
+        fontWeight: "bold",
+    },
     amountFont: {
         fontSize: SIZES.large,
         fontWeight: "bold",

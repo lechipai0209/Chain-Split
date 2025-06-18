@@ -30,7 +30,7 @@ const PaymentConfirmCard = ({ info }) => {
 
                 {/* amount */}
                 <View style={styles.arrowBlock}>
-                    <Text >own</Text>
+                    <Text style={styles.transactionMovement}>owe</Text>
                     <Text style={styles.amountFont}>{amount}</Text>
                 </View>
 
