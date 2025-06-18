@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
         peddingBottom: SIZES.small,
     }, 
     groupFont: {
-        fontSize: FONTS.regular,
+        fontSize: FONTS.small,
         fontWeight: "bold",
     },
     timeFont: {
@@ -32,6 +32,10 @@ const styles = StyleSheet.create({
     },
     nameFont: {
         fontSize: SIZES.medium,
+        fontWeight: "bold",
+    },
+    nameSmallerFont: {
+        fontSize: SIZES.small,
         fontWeight: "bold",
     },
     transactionMovement: {
@@ -44,10 +48,17 @@ const styles = StyleSheet.create({
     msgFont: {
         fontSize: SIZES.small,
     },
+    memberNameFont: {
+        fontSize: SIZES.small,
+    },
+
     sideBlock: {
+        flex:1,
         alignItems: "center",
+        justifyContent: "center"
     },
     arrowBlock: {
+        flex:1, 
         alignItems: "center",
         marginHorizontal: 10,
     },
@@ -55,6 +66,10 @@ const styles = StyleSheet.create({
         alignItems: "flex-start",
         marginTop: SIZES.small,
     },
+    memberNameContainer: {
+        alignItems: "flex-start",
+        marginTop: SIZES.small,
+    },   
     btnsContainer: {
         flexDirection: "row",
         justifyContent: "space-evenly",
@@ -77,6 +92,38 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         color: color,
     }),
+
+    titleContainer: {
+        justifyContent: "center",
+        alignItems: "center",
+    },
+
+    title: {
+        fontSize: FONTS.regular,
+        fontWeight: "bold",
+    },
+    divider: {
+        height: 1,
+        backgroundColor: 'black', 
+        marginVertical: 10,        
+    },
+  confirmNumberContainer: {
+        alignItems: "flex-start",
+        marginTop: SIZES.small,
+  },
+
+  
+
+  confirmNumberFont: (color) => ({
+        fontWeight : "bold",  
+        color: color    
+  }),
+  nameMinierFont:{
+        fontSize: 13,
+        fontWeight: "bold",
+  }
+
+
 
 }) ;
 

@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
         peddingBottom: SIZES.small,
     }, 
     groupFont: {
-        fontSize: FONTS.regular,
+        fontSize: FONTS.small,
         fontWeight: "bold",
     },
     timeFont: {
@@ -36,6 +36,9 @@ const styles = StyleSheet.create({
     },
     nameSmallerFont: {
         fontSize: SIZES.small,
+        fontWeight: "bold",
+    },
+    transactionMovement: {
         fontWeight: "bold",
     },
     amountFont: {
@@ -50,7 +53,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     arrowBlock: {
-        flex:1,
+        flex:1, 
         alignItems: "center",
         marginHorizontal: 10,
     },
@@ -80,12 +83,8 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         color: color,
     }),
-    divider: {
-    height: 1,
-    backgroundColor: 'black', 
-    marginVertical: 10,        
-  },
-      titleContainer: {
+
+    titleContainer: {
         justifyContent: "center",
         alignItems: "center",
     },
@@ -94,6 +93,11 @@ const styles = StyleSheet.create({
         fontSize: FONTS.regular,
         fontWeight: "bold",
     },
+    divider: {
+    height: 1,
+    backgroundColor: 'black', 
+    marginVertical: 10,        
+  },
 
 }) ;
 

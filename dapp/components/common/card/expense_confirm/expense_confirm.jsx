@@ -1,9 +1,13 @@
 import { View, Text, TouchableOpacity } from "react-native";
-import styles from "./payment_confirm.style" ;
+import styles from "./expense_confirm.style" ;
 import { COLORS } from "../../../../constants";
 import {  useState } from "react";
 
-const PaymentConfirmCard = ({ info }) => {
+
+
+// this is for debtor !!!!! 
+// for payer is expense_create !!!!!!!!
+const ExpenseConfirmCard = ({ info }) => {
 
     const [isExpensePending, setIsExpensePending] = useState(false) ;
     const [isExpenseFinalized, setIsExpenseFinalized] = useState(true) ;
@@ -12,6 +16,14 @@ const PaymentConfirmCard = ({ info }) => {
     const { payer, debtor, group, date, time, amount, msg } = info ;
     return (
         <View style={styles.container}>
+
+
+            <View style={styles.titleContainer}>
+                <Text style={styles.title}>Expense Confirmation</Text>
+            </View>
+
+            <View style={styles.divider} />
+
 
             {/* header */}
             <View style={styles.header}>
@@ -25,19 +37,27 @@ const PaymentConfirmCard = ({ info }) => {
                 {/* debtor */}
                 <View style={styles.sideBlock}>
                     <Text>Debtor</Text>
-                    <Text style={styles.nameFont}>{debtor}</Text>
+                    <Text 
+                        style={debtor.length > 5 ? styles.nameSmallerFont : styles.nameFont}
+                    >
+                        {debtor}
+                    </Text>
                 </View>
 
                 {/* amount */}
                 <View style={styles.arrowBlock}>
-                    <Text style={styles.transactionMovement}>owe</Text>
+                    <Text style={styles.transactionMovement}>⭢</Text>
                     <Text style={styles.amountFont}>{amount}</Text>
                 </View>
 
                 {/* payer */}
                 <View style={styles.sideBlock}>
                     <Text>Payer</Text>
-                    <Text style={styles.nameFont}>{payer}</Text>
+                    <Text 
+                        style={payer.length > 5 ? styles.nameSmallerFont : styles.nameFont}
+                    >
+                        {payer}
+                    </Text>
                 </View>
 
             </View>
@@ -49,7 +69,7 @@ const PaymentConfirmCard = ({ info }) => {
                 >{msg}</Text>
             </View>
 
-            { !isExpenseReacted ? (
+            { !isExpenseReacted ? (  // haven't confirm yet
             <View style={styles.btnsContainer}>
                 <TouchableOpacity 
                     style={styles.btn(COLORS.green, "40%")}
@@ -60,17 +80,17 @@ const PaymentConfirmCard = ({ info }) => {
                     <Text style={styles.btnText("black")}>Reject</Text>
                 </TouchableOpacity>
             </View>
-            ) : isExpensePending ? (
+            ) : isExpensePending ? ( //confirmed but haven't finalized yet
                 <View style={styles.btnsContainer}>
                     <View 
                         style={styles.btn(COLORS.transparent, "80%")}
                         disabled={true}
                     >
-                        <Text style={styles.btnText("black")}>Pending</Text>
+                        <Text style={styles.btnText("black")}>Pending...</Text>
                     </View>
 
                 </View>
-            ) : isExpenseFinalized ? (
+            ) : isExpenseFinalized ? (   // confirmed and finalized 
                 <View style={styles.btnsContainer}>
                     <View 
                         style={styles.btn(COLORS.transparent, "80%")}
@@ -80,13 +100,13 @@ const PaymentConfirmCard = ({ info }) => {
                     </View>
 
                 </View>
-            ) : (
+            ) : (                     // confirmed but dropped
                 <View style={styles.btnsContainer}>
                     <View 
                         style={styles.btn(COLORS.transparent, "80%")}
                         disabled={true}
                     >
-                        <Text style={styles.btnText(COLORS.red)}>Droped</Text>
+                        <Text style={styles.btnText(COLORS.red)}>Dropped</Text>
                     </View>
 
                 </View>                
@@ -100,4 +120,4 @@ const PaymentConfirmCard = ({ info }) => {
     ) ;
 }
 
-export default PaymentConfirmCard ;
+export default ExpenseConfirmCard ;

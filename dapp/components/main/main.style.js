@@ -7,8 +7,8 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.backGround,
         alignItems: "center",
         justifyContent: "center",
-        paddingLeft: "12.5%",
-        paddingRight: "12.5%",
+        paddingLeft: "10%",
+        paddingRight: "10%",
     },
     currencyContainer: {
         flexDirection: "row",
