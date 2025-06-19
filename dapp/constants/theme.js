@@ -1,15 +1,8 @@
 const COLORS ={
-    green: "#05924e",
-    lightgreen: "#00bf15",
-    black: "#000000",
     white: "#ffffff",
-    red: "#d10c0c",
-    gold: "#e6dcb8",
-    lightGray: "#e1e1de",
-    gray: "#c6c6b9",
-    darkGray: "#9f9f92",
-    blue: "#005dd8",
-    backGround: "#f6f4ed",
+    gray: "#e1e1de",
+    green: "#4caf50",
+    darkgray: "#8e99a3",
     transparent: "transparent"
 }
 
