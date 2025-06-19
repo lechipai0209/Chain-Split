@@ -37,9 +37,6 @@ pub fn create_group_handler(
     group_account.payer = payer_account.key();
     group_account.name = group_name ;
 
-    if nonce != [1,2,3,4,5] {
-        return Err(error!(ErrorCode::InvalidNonce));
-    }
 
     for i in 0..20 {
         group_account.member[i] = Pubkey::default();

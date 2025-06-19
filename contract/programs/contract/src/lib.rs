@@ -19,7 +19,7 @@ use crate::instructions::payer::close_expense::* ;
 use crate::instructions::payer::confirm_usd::* ;
 use crate::instructions::payer::finalize_expense::* ;
 
-declare_id!("Guq3MeZzkf5CiSK7wFBm7VzKSreSiccjz7kbJpH2boW9");
+declare_id!("EotpYAoc7dokSnzuKosXJ41yMM9Ba9dS1ErQhG4EFHRQ");
 
 #[program]
 pub mod contract {
@@ -82,7 +82,7 @@ pub mod contract {
     pub fn close_pay_with_usd(
         ctx: Context<ClosePayWithUsd>,
     ) -> Result<()> {
-        close_pay_with_usd(ctx)
+        close_pay_with_usd_handler(ctx)
     }
     
 // // payer side

@@ -16,7 +16,7 @@ pub struct ClosePayWithUsd<'info> {
     pub payment: Account<'info, PaymentAccount>,
 }
 
-pub fn close_pay_with_usd(ctx: Context<ClosePayWithUsd>) -> Result<()> {
+pub fn close_pay_with_usd_handler(ctx: Context<ClosePayWithUsd>) -> Result<()> {
     
     let payment_account = &mut ctx.accounts.payment;
     let signer_account = &mut ctx.accounts.signer;

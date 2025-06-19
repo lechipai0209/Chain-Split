@@ -2,7 +2,7 @@ import * as anchor from "@coral-xyz/anchor";
 import { Program } from "@coral-xyz/anchor";
 import { Contract } from "../target/types/contract";
 import { PublicKey, Keypair, LAMPORTS_PER_SOL } from "@solana/web3.js";
-
+import idl from "../target/idl/contract.json";
 
 /**
  * 建立一個測試用的錢包（Signer），並空投 SOL 至 localnet 測試鏈
@@ -31,12 +31,25 @@ export async function createTestUser(solAmount: number = 1): Promise<{
   };
 }
 
+function generateRandomNonce(length: number): number[] {
+  return Array.from({ length }, () => Math.floor(Math.random() * 256));
+}
+
 
 describe("contract", () => {
   
   const provider = anchor.AnchorProvider.env();
   anchor.setProvider(provider);
-  const program = anchor.workspace.Contract as Program<Contract>;
+
+
+ // 1.for devnet
+  const programId = new anchor.web3.PublicKey("EotpYAoc7dokSnzuKosXJ41yMM9Ba9dS1ErQhG4EFHRQ");
+  const program = new anchor.Program(idl as anchor.Idl, programId, provider);
+
+ // 2. for local test
+  // const program = anchor.workspace.Contract as Program<Contract>;
+  
+  
   const myWallet = anchor.workspace.contract.provider.wallet;
   const parser = new anchor.EventParser(program.programId, program.coder);
   
@@ -44,11 +57,15 @@ describe("contract", () => {
     
     const user = await createTestUser(2);
     const user_temp = await createTestUser(2);
-// create group
+
+
+    // create group
+    let nonce = generateRandomNonce(5);
+
     const [groupPda, bump] = anchor.web3.PublicKey.findProgramAddressSync(
       [
         Buffer.from("group"),
-        Buffer.from([1,2,3,4,5])
+        Buffer.from(nonce)
       ],
       program.programId
     );
@@ -57,7 +74,7 @@ describe("contract", () => {
     const hosterName = new anchor.BN(1234567890123456);
 
     let txSig = await program.methods
-      .createGroup([1,2,3,4,5], groupName, hosterName)
+      .createGroup(nonce, groupName, hosterName)
       .accounts({
         group: groupPda,
         payer: myWallet.publicKey,
@@ -65,6 +82,8 @@ describe("contract", () => {
       })
       .signers([])
       .rpc();
+
+    console.log("this is create group txSig : ", txSig, "\n") ;
 
     await provider.connection.confirmTransaction(txSig, "confirmed");
     let res = await provider.connection.getTransaction(txSig, {
@@ -74,7 +93,7 @@ describe("contract", () => {
     let creatGroupLog = Array.from(parser.parseLogs(res.meta.logMessages)) ;
     console.log("this is create group : ", creatGroupLog[0], "\n") ;
 
-// join group 
+    // join group 
     txSig = await program.methods
     .joinGroup(
       new anchor.BN(1234566690123456),
@@ -128,10 +147,12 @@ describe("contract", () => {
 
 
 // create expense
+    nonce = generateRandomNonce(7);
+
     const [expensePda, bump2] = anchor.web3.PublicKey.findProgramAddressSync(
       [
         Buffer.from("expense"),
-        Buffer.from([1,2,3,4,5,6,7])
+        Buffer.from(nonce)
       ],
       program.programId
     );
@@ -151,7 +172,7 @@ describe("contract", () => {
 
     txSig = await program.methods
     .createExpense(
-      [1,2,3,4,5,6,7],
+      nonce,
       Array.from(Buffer.from("MY test".padEnd(32, "\0"), "utf8")),
       memberPubkeys,
       expenseArray,
@@ -233,17 +254,18 @@ describe("contract", () => {
     console.log("this is close expense : ", closeExpenseLog[0], "\n") ;
 
 // pay with usd
+    nonce = generateRandomNonce(7);
     const [paymentPda, bump3] = anchor.web3.PublicKey.findProgramAddressSync(
       [
         Buffer.from("payment"),
-        Buffer.from([1,2,3,4,5,6,7])
+        Buffer.from(nonce)
       ],
       program.programId
     );
 
     
     txSig = await program.methods
-    .payWithUsd([1,2,3,4,5,6,7], 80)
+    .payWithUsd(nonce, 80)
     .accounts({
       payer: user.publicKey,
       recipient: myWallet.publicKey,
