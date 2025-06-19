@@ -78,14 +78,13 @@ pub fn create_expense_handler(
     expense_account.member = member;
     expense_account.expense = expense;
     expense_account.amount = amount;
-    expense_account.verified = [true; 20];
+    expense_account.verified = [VerifiedType::True; 20] ;
     expense_account.finalized = false;
 
     for i in 0..expense_account.verified.len() {
         if member[i] != Pubkey::default() && member[i] != payer_account.key() {
-            expense_account.verified[i] = false;
+            expense_account.verified[i] = VerifiedType::None;
         }
-        
     }
 
     emit!(ExpenseCreatedEvent {

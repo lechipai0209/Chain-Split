@@ -12,6 +12,7 @@ use crate::instructions::member::join_group::* ;
 use crate::instructions::member::sign_expense::* ;
 use crate::instructions::member::pay_with_usd::* ;
 use crate::instructions::member::pay_with_usdt::* ;
+use crate::instructions::member::close_pay_with_usd::* ;
 
 use crate::instructions::payer::create_expense::* ;
 use crate::instructions::payer::close_expense::* ;
@@ -77,7 +78,13 @@ pub mod contract {
     ) -> Result<()> {
         pay_with_usdt_handler(ctx, amount)
     }
-
+    
+    pub fn close_pay_with_usd(
+        ctx: Context<ClosePayWithUsd>,
+    ) -> Result<()> {
+        close_pay_with_usd(ctx)
+    }
+    
 // // payer side
     pub fn close_expense(
         ctx: Context<CloseExpense>,
@@ -107,6 +114,8 @@ pub mod contract {
     ) -> Result<()> {
         finalize_expense_handler(ctx)
     }
+
+    
     
     
 }

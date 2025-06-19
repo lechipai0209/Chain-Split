@@ -29,7 +29,8 @@ pub fn sign_expense_handler(
 
     for i in 0..expense_account.member.len() {
         if expense_account.member[i] == signer_account.key() {
-            expense_account.verified[i] = verified;
+            expense_account.verified[i] = 
+                if verified {VerifiedType::True} else {VerifiedType::False};
             total_expense += expense_account.expense[i];
         }
     }// redundent check for preventing same member payment

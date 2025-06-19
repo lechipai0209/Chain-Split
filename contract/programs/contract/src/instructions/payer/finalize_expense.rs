@@ -31,7 +31,7 @@ pub fn finalize_expense_handler(
     ) ;
 
     require!(
-        expense_account.verified.iter().all(|v| *v),
+         expense_account.verified.iter().all(|v| *v == VerifiedType::True),
         ErrorCode::NotAllVerified
     ) ;
 
