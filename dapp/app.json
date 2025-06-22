@@ -5,6 +5,17 @@
       "expo-router"
     ],
     "name": "dapp",
-    "slug": "dapp"
+    "slug": "dapp",
+    "android": {
+      "googleServicesFile": ".//google-services.json",
+      "package": "com.kimery.dapp"
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "37cf298b-11d0-4a07-902e-c5564c4bf7a8"
+      }
+    },
+    "owner": "kimeryqqqq"
   }
 }
