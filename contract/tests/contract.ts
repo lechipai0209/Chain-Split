@@ -41,14 +41,8 @@ describe("contract", () => {
   const provider = anchor.AnchorProvider.env();
   anchor.setProvider(provider);
 
-
- // 1.for devnet
   const programId = new anchor.web3.PublicKey("EotpYAoc7dokSnzuKosXJ41yMM9Ba9dS1ErQhG4EFHRQ");
   const program = new anchor.Program(idl as anchor.Idl, programId, provider);
-
- // 2. for local test
-  // const program = anchor.workspace.Contract as Program<Contract>;
-  
   
   const myWallet = anchor.workspace.contract.provider.wallet;
   const parser = new anchor.EventParser(program.programId, program.coder);
