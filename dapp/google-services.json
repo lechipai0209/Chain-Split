@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "770229994415",
+    "project_id": "monkeytank",
+    "storage_bucket": "monkeytank.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:770229994415:android:246d8ff13ef6e3a0a1e55a",
+        "android_client_info": {
+          "package_name": "com.kimery.dapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8IUM9bCnBtswvnBfq0UizB4Kh-lPj5sE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
