@@ -1,6 +1,4 @@
 import * as anchor from "@coral-xyz/anchor";
-import { Program } from "@coral-xyz/anchor";
-import { Contract } from "../target/types/contract";
 import { PublicKey, Keypair, LAMPORTS_PER_SOL } from "@solana/web3.js";
 import idl from "../target/idl/contract.json";
 

@@ -60,17 +60,6 @@ exports.getTransactions = onRequest(async (req, res) => {
 
 
 
-exports.heliousWebhook = onRequest(async (req, res) => {
-  console.log("📦 [Helius Webhook] Request received");
-
-  console.log("🔗 Headers:", JSON.stringify(req.headers, null, 2));
-  console.log("🧾 req.body:", JSON.stringify(req.body, null, 2));
-  // console.log("🧾 req:", JSON.stringify(req, null, 2));
-  console.log("okok") ;
-  res.status(200).send("✅ Webhook received");
-});
-
-
 
 exports.pushMessage = onRequest(async (req, res) => {
   try {
@@ -126,20 +115,5 @@ exports.getUser = onRequest( async (req, res) => {
   }
 });
 
-// webhook 要監聽哪一些東西
-// const options = {
-//   method: 'POST',
-//   headers: {'Content-Type': 'application/json'},
-//   body: `{
-//     "webhookURL":"https://us-central1-monkeytank.cloudfunctions.net/heliousWebhook",
-//     "transactionTypes":[],
-//     "webhookType":"raw",
-//     "accountAddresses":["EotpYAoc7dokSnzuKosXJ41yMM9Ba9dS1ErQhG4EFHRQ"]}
-//   `
-// };
 
-// fetch('https://api.helius.xyz/v0/webhooks?api-key=56e5e408-6483-4b76-9a90-5a81246a5918', options)
-//   .then(response => response.json())
-//   .then(response => console.log(response))
-//   .catch(err => console.error(err));
 
