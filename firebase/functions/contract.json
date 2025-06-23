@@ -1,0 +1,875 @@
+{
+  "version": "0.1.0",
+  "name": "contract",
+  "instructions": [
+    {
+      "name": "createGroup",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "group",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "nonce",
+          "type": {
+            "array": [
+              "u8",
+              5
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "removeGroupMember",
+      "accounts": [
+        {
+          "name": "signer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "group",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "memberPubkey",
+          "type": "publicKey"
+        }
+      ]
+    },
+    {
+      "name": "closeGroup",
+      "accounts": [
+        {
+          "name": "signer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "group",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "joinGroup",
+      "accounts": [
+        {
+          "name": "signer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "group",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "signExpense",
+      "accounts": [
+        {
+          "name": "signer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "expense",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "verified",
+          "type": "bool"
+        }
+      ]
+    },
+    {
+      "name": "payWithUsd",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "payment",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "recipient",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "group",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "nonce",
+          "type": {
+            "array": [
+              "u8",
+              7
+            ]
+          }
+        },
+        {
+          "name": "amount",
+          "type": "u32"
+        }
+      ]
+    },
+    {
+      "name": "payWithUsdt",
+      "accounts": [
+        {
+          "name": "usdtMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "fromTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "recipient",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "toTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "group",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u32"
+        }
+      ]
+    },
+    {
+      "name": "closePayWithUsd",
+      "accounts": [
+        {
+          "name": "signer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "payment",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "closeExpense",
+      "accounts": [
+        {
+          "name": "signer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "expense",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "confirmUsd",
+      "accounts": [
+        {
+          "name": "signer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "payment",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "group",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "createExpense",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "expense",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "group",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "nonce",
+          "type": {
+            "array": [
+              "u8",
+              7
+            ]
+          }
+        },
+        {
+          "name": "member",
+          "type": {
+            "array": [
+              "publicKey",
+              20
+            ]
+          }
+        },
+        {
+          "name": "expense",
+          "type": {
+            "array": [
+              "u32",
+              20
+            ]
+          }
+        },
+        {
+          "name": "amount",
+          "type": "u32"
+        }
+      ]
+    },
+    {
+      "name": "finalizeExpense",
+      "accounts": [
+        {
+          "name": "signer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "expense",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "group",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    }
+  ],
+  "accounts": [
+    {
+      "name": "GroupAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "payer",
+            "type": "publicKey"
+          },
+          {
+            "name": "member",
+            "type": {
+              "array": [
+                "publicKey",
+                20
+              ]
+            }
+          },
+          {
+            "name": "net",
+            "type": {
+              "array": [
+                "i32",
+                20
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "ExpenseAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "group",
+            "type": "publicKey"
+          },
+          {
+            "name": "payer",
+            "type": "publicKey"
+          },
+          {
+            "name": "amount",
+            "type": "u32"
+          },
+          {
+            "name": "member",
+            "type": {
+              "array": [
+                "publicKey",
+                20
+              ]
+            }
+          },
+          {
+            "name": "expense",
+            "type": {
+              "array": [
+                "u32",
+                20
+              ]
+            }
+          },
+          {
+            "name": "verified",
+            "type": {
+              "array": [
+                {
+                  "defined": "VerifiedType"
+                },
+                20
+              ]
+            }
+          },
+          {
+            "name": "finalized",
+            "type": "bool"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PaymentAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "group",
+            "type": "publicKey"
+          },
+          {
+            "name": "payer",
+            "type": "publicKey"
+          },
+          {
+            "name": "recipient",
+            "type": "publicKey"
+          },
+          {
+            "name": "amount",
+            "type": "u32"
+          },
+          {
+            "name": "verified",
+            "type": "bool"
+          }
+        ]
+      }
+    }
+  ],
+  "types": [
+    {
+      "name": "CustomError",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "MemberNotInExpense"
+          }
+        ]
+      }
+    },
+    {
+      "name": "VerifiedType",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "None"
+          },
+          {
+            "name": "True"
+          },
+          {
+            "name": "False"
+          }
+        ]
+      }
+    }
+  ],
+  "events": [
+    {
+      "name": "GroupClosedEvent",
+      "fields": [
+        {
+          "name": "group",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "signer",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "groupAccount",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "action",
+          "type": "string",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "GroupCreatedEvent",
+      "fields": [
+        {
+          "name": "group",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "signer",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "account",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "action",
+          "type": "string",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "GroupMemberRemovedEvent",
+      "fields": [
+        {
+          "name": "group",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "signer",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "account",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "member",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "action",
+          "type": "string",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "PaymentClosedEvent",
+      "fields": [
+        {
+          "name": "group",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "signer",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "account",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "payer",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "recipient",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "amount",
+          "type": "u32",
+          "index": false
+        },
+        {
+          "name": "action",
+          "type": "string",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "MemberJoinedEvent",
+      "fields": [
+        {
+          "name": "group",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "signer",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "account",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "action",
+          "type": "string",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "PaymentCreatedEvent",
+      "fields": [
+        {
+          "name": "group",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "signer",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "account",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "payer",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "recipient",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "amount",
+          "type": "u32",
+          "index": false
+        },
+        {
+          "name": "action",
+          "type": "string",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "PayWithUsdtEvent",
+      "fields": [
+        {
+          "name": "group",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "signer",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "payer",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "recipient",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "amount",
+          "type": "u32",
+          "index": false
+        },
+        {
+          "name": "action",
+          "type": "string",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "ExpenseSignedEvent",
+      "fields": [
+        {
+          "name": "group",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "signer",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "account",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "verified",
+          "type": "bool",
+          "index": false
+        },
+        {
+          "name": "totalExpense",
+          "type": "u32",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "ExpenseClosedEvent",
+      "fields": [
+        {
+          "name": "group",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "signer",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "account",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "action",
+          "type": "string",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "PaymentConfirmedEvent",
+      "fields": [
+        {
+          "name": "group",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "signer",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "account",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "payer",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "recipient",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "amount",
+          "type": "u32",
+          "index": false
+        },
+        {
+          "name": "action",
+          "type": "string",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "ExpenseCreatedEvent",
+      "fields": [
+        {
+          "name": "group",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "signer",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "account",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "amount",
+          "type": "u32",
+          "index": false
+        },
+        {
+          "name": "members",
+          "type": {
+            "vec": "publicKey"
+          },
+          "index": false
+        },
+        {
+          "name": "expense",
+          "type": {
+            "vec": "u32"
+          },
+          "index": false
+        },
+        {
+          "name": "action",
+          "type": "string",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "FinalizeExpenseEvent",
+      "fields": [
+        {
+          "name": "group",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "signer",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "account",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "action",
+          "type": "string",
+          "index": false
+        }
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "Unsettled",
+      "msg": "Net array contains non-zero values"
+    },
+    {
+      "code": 6001,
+      "name": "Unauthorized",
+      "msg": "Not the payer of the group"
+    }
+  ]
+}
