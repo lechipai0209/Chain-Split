@@ -29,11 +29,9 @@ pub mod contract {
     pub fn create_group(
         ctx: Context<CreateGroup>, 
         nonce: [u8; 5],
-        group_name: [u8; 32], 
-        hoster_name: u128,
     ) -> Result<()> {
         
-        create_group_handler(ctx, nonce, group_name, hoster_name)
+        create_group_handler(ctx, nonce)
     } 
 
     pub fn remove_group_member(
@@ -52,9 +50,8 @@ pub mod contract {
 // // // member side
     pub fn join_group(
         ctx: Context<JoinGroup>, 
-        name: u128,
     ) -> Result<()> {
-        join_group_handler(ctx, name)
+        join_group_handler(ctx)
     }
 
     pub fn sign_expense(
@@ -101,12 +98,11 @@ pub mod contract {
     pub fn create_expense(
         ctx: Context<CreateExpense>, 
         nonce: [u8; 7],
-        name: [u8; 32],
         member: [Pubkey; 20],
         expense: [u32; 20],
         amount: u32,
     ) -> Result<()> {
-        create_expense_handler(ctx, nonce, name, member, expense, amount)
+        create_expense_handler(ctx, nonce, member, expense, amount)
     }
 
     pub fn finalize_expense(

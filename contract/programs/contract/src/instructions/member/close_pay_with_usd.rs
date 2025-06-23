@@ -28,8 +28,12 @@ pub fn close_pay_with_usd_handler(ctx: Context<ClosePayWithUsd>) -> Result<()> {
     );
 
     emit!(PaymentClosedEvent {
+        group: payment_account.group.to_string(),
         signer: signer_account.key().to_string(),
-        payment_account: payment_account.key().to_string(),
+        account: payment_account.key().to_string(),
+        payer: payment_account.payer.to_string(),
+        recipient: payment_account.recipient.to_string(),
+        amount: payment_account.amount,
         action: "close the payment".to_string(),
         
     })  ;
@@ -47,7 +51,11 @@ pub enum ErrorCode {
 
 #[event]
 pub struct PaymentClosedEvent {
+    pub group: String,
     pub signer: String,
-    pub payment_account: String,
+    pub account: String,
+    pub payer: String,
+    pub recipient: String,
+    pub amount: u32,
     pub action: String,
 }

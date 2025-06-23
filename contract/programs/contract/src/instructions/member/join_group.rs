@@ -13,7 +13,7 @@ pub struct JoinGroup<'info> {
 }
 
 
-pub fn join_group_handler(ctx: Context<JoinGroup>, name: u128 ) -> Result<()> {
+pub fn join_group_handler(ctx: Context<JoinGroup>) -> Result<()> {
     
     let group_account = &mut ctx.accounts.group;
     let signer_account = &mut ctx.accounts.signer;
@@ -28,11 +28,11 @@ pub fn join_group_handler(ctx: Context<JoinGroup>, name: u128 ) -> Result<()> {
     for i in 0..group_account.member.len() {
         if group_account.member[i] == Pubkey::default() {
             group_account.member[i] = signer_account.key();
-            group_account.member_name[i] = name;
 
             emit!(MemberJoinedEvent {
+                group: group_account.key().to_string(),
                 signer: signer_account.key().to_string(),
-                group_account: group_account.key().to_string(),
+                account: group_account.key().to_string(),
                 action: "join the group".to_string(),
             });
             
@@ -55,8 +55,9 @@ pub enum ErrorCode {
 
 #[event]
 pub struct MemberJoinedEvent {
+    pub group: String,
     pub signer: String,
-    pub group_account: String,
+    pub account: String,
     pub action: String,
 }
 

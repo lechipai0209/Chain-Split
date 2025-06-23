@@ -31,7 +31,6 @@ pub struct CreateExpense<'info> {
 pub fn create_expense_handler(
     ctx: Context<CreateExpense>, 
     nonce: [u8; 7],
-    name: [u8; 32],
     member: [Pubkey; 20],
     expense: [u32; 20],
     amount: u32,
@@ -74,7 +73,6 @@ pub fn create_expense_handler(
 
     expense_account.payer = payer_account.key();
     expense_account.group = group_account.key();
-    expense_account.name = name;
     expense_account.member = member;
     expense_account.expense = expense;
     expense_account.amount = amount;
@@ -88,8 +86,12 @@ pub fn create_expense_handler(
     }
 
     emit!(ExpenseCreatedEvent {
+        group: group_account.key().to_string(),
         signer: payer_account.key().to_string(),
-        expense_account: expense_account.key().to_string(),
+        account: expense_account.key().to_string(),
+        amount: amount,
+        members: member.to_vec(),
+        expense: expense.to_vec(),
         action: "create the expense".to_string(),
     });
 
@@ -115,7 +117,11 @@ pub enum ErrorCode {
 
 #[event]
 pub struct ExpenseCreatedEvent {
+    group: String,
     signer: String,
-    expense_account: String,
+    account: String,
+    amount: u32,
+    members: Vec<Pubkey>,
+    expense: Vec<u32>,
     action: String,
 }

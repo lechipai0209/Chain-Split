@@ -59,8 +59,9 @@ pub fn finalize_expense_handler(
     expense_account.finalized = true ;
 
     emit!(FinalizeExpenseEvent {
+        group: group_account.key().to_string(),
         signer: signer_account.key().to_string(),
-        expense_account: expense_account.key().to_string(),
+        account: expense_account.key().to_string(),
         action: "finalize expense".to_string(),
     });
 
@@ -81,7 +82,8 @@ pub enum ErrorCode {
 
 #[event]
 pub struct FinalizeExpenseEvent {
+    group: String,
     signer: String,
-    expense_account: String,
+    account: String,
     action: String,
 }

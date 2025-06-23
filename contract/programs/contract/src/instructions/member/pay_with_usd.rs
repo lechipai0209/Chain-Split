@@ -48,6 +48,8 @@ pub fn pay_with_usd_handler(
 
     emit!(PaymentCreatedEvent {
         group: group_account.key().to_string(),
+        signer: payer_account.key().to_string(),
+        account: payment_account.key().to_string(),
         payer: payer_account.key().to_string(),
         recipient: recipient_account.key().to_string(),
         amount: amount,
@@ -68,6 +70,8 @@ pub enum ErrorCode {
 #[event]
 pub struct PaymentCreatedEvent {
     pub group: String,
+    pub signer: String,
+    pub account: String,
     pub payer: String,
     pub recipient: String,
     pub amount: u32,

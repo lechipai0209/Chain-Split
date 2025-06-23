@@ -36,9 +36,10 @@ pub fn sign_expense_handler(
     }// redundent check for preventing same member payment
 
     emit!(ExpenseSignedEvent {
+        group: expense_account.group.to_string(),
         signer: signer_account.key().to_string(),
+        account: expense_account.key().to_string(),
         verified,
-        expense_account: expense_account.key().to_string(),
         total_expense,
     });
     
@@ -48,9 +49,10 @@ pub fn sign_expense_handler(
 
 #[event]
 pub struct ExpenseSignedEvent {
+    pub group: String,
     pub signer: String,
+    pub account: String,
     pub verified: bool,
-    pub expense_account: String,
     pub total_expense: u32,
 }
 

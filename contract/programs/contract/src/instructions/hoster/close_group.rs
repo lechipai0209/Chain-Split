@@ -27,6 +27,7 @@ pub fn close_group_handler(ctx: Context<CloseGroup>) -> Result<()> {
     require!(!has_nonzero, ErrorCode::Unsettled);
 
     emit!(GroupClosedEvent {
+        group: group_account.key().to_string(),
         signer: signer_account.key().to_string(),
         group_account: group_account.key().to_string(),
         action: "close the group".to_string(),
@@ -49,6 +50,7 @@ pub enum ErrorCode {
 
 #[event]
 pub struct GroupClosedEvent {
+    group: String,
     signer: String,
     group_account: String,
     action: String,

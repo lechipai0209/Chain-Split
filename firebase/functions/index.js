@@ -3,7 +3,7 @@ const logger = require("firebase-functions/logger");
 const admin = require("firebase-admin");
 const axios = require("axios");
 const { db } = require("./config/firestore") ;
- ; 
+
 exports.helloFireStore = onRequest(async (req, res) => {
   const doc = await db.collection("test").doc("mydoc").get();
   if (!doc.exists) {

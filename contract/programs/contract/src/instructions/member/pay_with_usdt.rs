@@ -80,6 +80,7 @@ pub fn pay_with_usdt_handler(
     emit!(PayWithUsdtEvent {
         group: group_account.key().to_string(),
         signer: payer_account.key().to_string(),
+        payer: payer_account.key().to_string(),
         recipient: recipient_account.key().to_string(),
         amount: amount,
         action: "pay with USDT".to_string(),
@@ -115,6 +116,7 @@ pub enum ErrorCode {
 pub struct PayWithUsdtEvent {
     pub group: String,
     pub signer: String,
+    pub payer: String,
     pub recipient: String,
     pub amount: u32,
     pub action: String,

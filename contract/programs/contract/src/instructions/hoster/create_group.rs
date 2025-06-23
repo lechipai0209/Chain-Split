@@ -28,30 +28,24 @@ pub struct CreateGroup<'info> {
 pub fn create_group_handler(
     ctx: Context<CreateGroup>, 
     nonce: [u8; 5],
-    group_name: [u8; 32], 
-    hoster_name: u128,
 ) -> Result<()> {
     let group_account = &mut ctx.accounts.group;
     let payer_account = &mut ctx.accounts.payer;
 
     group_account.payer = payer_account.key();
-    group_account.name = group_name ;
-
 
     for i in 0..20 {
         group_account.member[i] = Pubkey::default();
-        group_account.member_name[i] = 0;
         group_account.net[i] = 0;
     }
 
     group_account.member[0] = payer_account.key();
-    group_account.member_name[0] = hoster_name;
 
     emit!(GroupCreatedEvent {
+        group: group_account.key().to_string(),
         signer: payer_account.key().to_string(),
-        group_account: group_account.key().to_string(),
+        account: group_account.key().to_string(),
         action: "create the group".to_string(),
-        nonce: nonce,
     });
 
     Ok(())
@@ -59,9 +53,9 @@ pub fn create_group_handler(
 
 #[event]
 pub struct GroupCreatedEvent {
+    pub group: String,
     pub signer: String,
-    pub group_account: String,
-    pub nonce: [u8; 5],
+    pub account: String,
     pub action: String,
 }
 

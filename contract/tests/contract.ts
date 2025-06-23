@@ -64,11 +64,9 @@ describe("contract", () => {
       program.programId
     );
 
-    const groupName = Array.from(Buffer.from("JakeGroup".padEnd(32), "utf8")); // [u8; 32]
-    const hosterName = new anchor.BN(1234567890123456);
 
     let txSig = await program.methods
-      .createGroup(nonce, groupName, hosterName)
+      .createGroup(nonce)
       .accounts({
         group: groupPda,
         payer: myWallet.publicKey,
@@ -89,9 +87,7 @@ describe("contract", () => {
 
     // join group 
     txSig = await program.methods
-    .joinGroup(
-      new anchor.BN(1234566690123456),
-    )
+    .joinGroup()
     .accounts({
       group: groupPda,
       signer: user.publicKey,
@@ -109,9 +105,7 @@ describe("contract", () => {
 
 // remove member 
     txSig = await program.methods
-    .joinGroup(
-      new anchor.BN(1234566690128888),
-    )
+    .joinGroup()
     .accounts({
       group: groupPda,
       signer: user_temp.publicKey,
@@ -167,7 +161,6 @@ describe("contract", () => {
     txSig = await program.methods
     .createExpense(
       nonce,
-      Array.from(Buffer.from("MY test".padEnd(32, "\0"), "utf8")),
       memberPubkeys,
       expenseArray,
       90, 
@@ -246,6 +239,49 @@ describe("contract", () => {
 
     let closeExpenseLog = Array.from(parser.parseLogs(res.meta.logMessages)) ;
     console.log("this is close expense : ", closeExpenseLog[0], "\n") ;
+
+// close pay with usd
+    nonce = generateRandomNonce(7);
+    const [paymentPdaTemp, bump4] = anchor.web3.PublicKey.findProgramAddressSync(
+      [
+        Buffer.from("payment"),
+        Buffer.from(nonce)
+      ],
+      program.programId
+    );
+
+    
+    txSig = await program.methods
+    .payWithUsd(nonce, 80)
+    .accounts({
+      payer: user.publicKey,
+      recipient: myWallet.publicKey,
+      group: groupPda,
+      payment: paymentPdaTemp,
+      systemProgram: anchor.web3.SystemProgram.programId
+    })
+    .signers([user.signer])
+    .rpc();
+
+    await provider.connection.confirmTransaction(txSig, "confirmed");    
+
+
+    const txSigClose = await program.methods
+    .closePayWithUsd()
+    .accounts({
+      signer: user.publicKey,
+      payment: paymentPdaTemp,
+    })
+    .signers([user.signer])
+    .rpc() ;
+
+    await provider.connection.confirmTransaction(txSigClose, "confirmed");
+    res = await provider.connection.getTransaction(txSigClose, {
+      commitment: "confirmed",
+    });
+
+    let closePayWithUsdLog = Array.from(parser.parseLogs(res.meta.logMessages)) ;
+    console.log("this is close pay with usd : ", closePayWithUsdLog[0], "\n") ;
 
 // pay with usd
     nonce = generateRandomNonce(7);

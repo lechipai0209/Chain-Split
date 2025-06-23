@@ -39,6 +39,8 @@ pub fn confirm_usd_handler(ctx: Context<ConfirmUsd>) -> Result<()> {
 
     emit!(PaymentConfirmedEvent {
         group: payment_account.group.to_string() ,
+        signer: signer_account.key().to_string(),
+        account: payment_account.key().to_string(),
         payer: payment_account.payer.to_string(),
         recipient: signer_account.key().to_string(),
         amount: payment_account.amount,
@@ -58,6 +60,8 @@ pub enum ErrorCode {
 #[event]
 pub struct PaymentConfirmedEvent {
     pub group: String,
+    pub signer: String,
+    pub account: String,
     pub payer: String,
     pub recipient: String,
     pub amount: u32,
