@@ -2,10 +2,8 @@ const {onRequest} = require("firebase-functions/v2/https");
 const logger = require("firebase-functions/logger");
 const admin = require("firebase-admin");
 const axios = require("axios");
-
-admin.initializeApp();
-const db = admin.firestore();
-
+const { db } = require("./config/firestore") ;
+ ; 
 exports.helloFireStore = onRequest(async (req, res) => {
   const doc = await db.collection("test").doc("mydoc").get();
   if (!doc.exists) {
@@ -15,10 +13,12 @@ exports.helloFireStore = onRequest(async (req, res) => {
   }
 });
 
-exports.test = onRequest((request, response) => {
-  logger.info("Hello logs!", {structuredData: true});
-  response.send("Hello from Firebase!");
+exports.healthCheck = onRequest((req, res) => {
+  logger.info("healthcheck", {structuredData: true});
+  res.send("Hello from Firebase!");
 });
+
+
 
 
 const API_KEY = "56e5e408-6483-4b76-9a90-5a81246a5918";
@@ -111,6 +111,22 @@ exports.pushIndieMessage = onRequest(async (req, res) => {
 }) ;
 
 
+exports.getUser = onRequest( async (req, res) => {
+  try {
+    const doc = await db.collection("address").doc("test").get();
+    if (!doc.exists) {
+      res.status(404).send({ error: "User not found" });
+      return;
+    }
+    console.log(doc.data());
+    res.status(200).send(doc.data());
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: error.message });
+  }
+});
+
+// webhook 要監聽哪一些東西
 // const options = {
 //   method: 'POST',
 //   headers: {'Content-Type': 'application/json'},
