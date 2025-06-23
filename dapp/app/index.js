@@ -20,8 +20,7 @@ import {
   PublicKey,
   Transaction,
 } from "@solana/web3.js";
-import { PHANTOM_URL, buildUrl } from '../constants';
-import { toUnicode } from 'punycode';
+import { buildUrl } from '../constants';
 import { decryptPayload, encryptPayload } from '../utils';  
 
 
@@ -57,7 +56,7 @@ const Home = () => {
     };
     setupNotifications();
   }, []);
-  
+
 
   // phantom response deeplink
   const [deepLink, setDeepLink] = useState(""); 
