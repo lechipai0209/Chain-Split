@@ -7,6 +7,7 @@ import Footer from '../components/common/footer/footer' ;
 import Main from '../components/main/main' ;
 import registerNNPushToken from 'native-notify';
 import { registerIndieID } from 'native-notify';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import 'react-native-get-random-values';
 import "react-native-url-polyfill/auto";
@@ -19,9 +20,12 @@ import {
   Connection,
   PublicKey,
   Transaction,
+  SystemProgram
 } from "@solana/web3.js";
 import { buildUrl } from '../constants';
 import { decryptPayload, encryptPayload } from '../utils';  
+import { Program, AnchorProvider, web3, BN } from '@coral-xyz/anchor';
+import idl from '../idl/contract.json'; 
 
 
 const onConnectRedirectLink = Linking.createURL("onConnect");
@@ -31,9 +35,27 @@ const onSignAndSendTransactionRedirectLink = Linking.createURL("onSignAndSendTra
 
 const connection = new Connection(clusterApiUrl("devnet"));
 
+const provider = new AnchorProvider(connection, {}, {});
+const programId = new PublicKey("EYR8PHamGh1S1PM7d7txEDzyqfGfnchMbQ6tNHMBBsfX");
+const program = new Program(idl, programId, provider);
+const nonce = [Math.floor(Math.random() * 256), 23, 88, 44, 190]; 
+const [ groupPda, bump ] = PublicKey.findProgramAddressSync(
+  [Buffer.from("group"), Buffer.from(nonce)],
+  programId
+);
 
-const Home = () => {
 
+const Home = async () => {
+  const router = useRouter() ;
+  
+  const tx = await program.methods
+    .createGroup(nonce)
+    .accounts({
+      group: groupPda,
+      payer: new PublicKey(phantomWalletPublicKey), // 這是 Phantom 給你的 publicKey
+      systemProgram: SystemProgram.programId,
+    })
+    .transaction();
   /**
    * this is for push notification
    * registerNNPushToken: let native-notify know which group the app belongs to
@@ -41,8 +63,9 @@ const Home = () => {
    * 
    * We also have to ask permission of sending notification from user.
    *  */ 
-  registerNNPushToken(30818, 'ZmwQ5lOc1tV4oM9jyMuU9J');
-  registerIndieID('testdambitch', 30818, 'ZmwQ5lOc1tV4oM9jyMuU9J');
+
+  // registerNNPushToken(30818, 'ZmwQ5lOc1tV4oM9jyMuU9J');
+  // registerIndieID('testdambitch', 30818, 'ZmwQ5lOc1tV4oM9jyMuU9J');
 
   useEffect(() => {
     const setupNotifications = async () => {
@@ -58,7 +81,7 @@ const Home = () => {
   }, []);
 
 
-  // phantom response deeplink
+  // phantom response deeplink( not phantom deeplink!!!!)
   const [deepLink, setDeepLink] = useState(""); 
   // wallet public key
   const [phantomWalletPublicKey, setPhantomWalletPublicKey] = useState(null);
@@ -82,6 +105,9 @@ const Home = () => {
    * both our dapp and phantom know a shared secret key. 
    * 
    * So, by following code, we will see these steps:
+   * 
+   * 
+   * 
    * 1. using deeplink to jump to phantom(three types)
    * 2. listening phantom's callback response(three types, too)
    * 3. analysis the response parameters
@@ -118,6 +144,7 @@ const Home = () => {
         redirect_link: onConnectRedirectLink, 
       }); 
       const url = buildUrl("connect", params);
+ 
       await Linking.openURL(url);
     } catch (err) {
       Alert.alert('Error', `Unable to open Phantom: ${err.message}`);
@@ -125,16 +152,20 @@ const Home = () => {
   };
 
   const disconnect = async () => {
-    const payload = {session};
-    const [nonce, encryptedPayload] = encryptPayload(payload, sharedSecret);
-    const params = new URLSearchParams({
-      dapp_encryption_public_key: bs58.encode(dappKeyPair.publicKey),
-      nonce: bs58.encode(nonce),
-      redirect_link: onDisconnectRedirectLink,
-      payload: bs58.encode(encryptedPayload),
-    });
-    const url = buildUrl("disconnect", params);
-    Linking.openURL(url);
+    try{
+      const payload = {session};
+      const [nonce, encryptedPayload] = encryptPayload(payload, sharedSecret);
+      const params = new URLSearchParams({
+        dapp_encryption_public_key: bs58.encode(dappKeyPair.publicKey),
+        nonce: bs58.encode(nonce),
+        redirect_link: onDisconnectRedirectLink,
+        payload: bs58.encode(encryptedPayload),
+      });
+      const url = buildUrl("disconnect", params);
+      Linking.openURL(url);
+    }catch(error) {
+      console.log(error, "damn it") ;
+    }
   };
 
 
@@ -187,6 +218,13 @@ const Home = () => {
  * to listen the deeplink.
  */
 useEffect(() => {
+  
+  const getSaveWalletAddress = async () => {
+    const saveWalletAddress = await AsyncStorage.getItem('saveWalletAddress');
+    setPhantomWalletPublicKey(saveWalletAddress) ;
+  }
+
+  getSaveWalletAddress() ;
   //senario 1: cold activate
   const initializeDeeplinks = async () => {
     const initialUrl = await Linking.getInitialURL();
@@ -204,7 +242,6 @@ useEffect(() => {
 
 const handleDeepLink = ({ url }) => {
   setDeepLink(url);
-  console.log("something come back!!!!!!!!!!!!!!!!!!!!!", url) ;
 };
 
 
@@ -216,7 +253,10 @@ const handleDeepLink = ({ url }) => {
 */
 useEffect(() => {
 
-  if(!deepLink) return ;
+  if(!deepLink) {
+    console.log("no deeplink") ;
+    return ;
+  } ;
   const url = new URL(deepLink) ;
   const params = url.searchParams ;
 
@@ -247,11 +287,25 @@ useEffect(() => {
     setSession(connectData.session);
     setPhantomWalletPublicKey(new PublicKey(connectData.public_key));
     console.log(`connected to ${connectData.public_key.toString()}`);
+    
+    const setSaveWalletAddress = async () => {
+      const publicKey = new PublicKey(connectData.public_key).toString();
+      await AsyncStorage.setItem(
+        'saveWalletAddress', 
+        publicKey
+      );
+    }
+    setSaveWalletAddress() ;
   }
 
   if(/onDisconnect/.test(url.pathname)) {
     setPhantomWalletPublicKey(null) ;
     console.log("disconnected") ;
+
+    const setSaveWalletAddress = async () => {
+      await AsyncStorage.setItem('saveWalletAddress', null);
+    }
+    setSaveWalletAddress() ;
   }
 
   if (/onSignAndSendTransaction/.test(url.pathname)) {
@@ -278,7 +332,7 @@ useEffect(() => {
                     headerStyle: { backgroundColor: COLORS.gold},
                     headerShadowVisible: false,   
                     headerLeft: () => (          
-                        <HeaderWallet publicKey="0x1444467891je6kjetkektekekejtktejrtkr"/>
+                        <HeaderWallet publicKey={phantomWalletPublicKey? phantomWalletPublicKey.toString(): null}/>
                     ),
                     headerRight: () => (
                         <Button title="Connect Phantom" onPress={connect} />
@@ -286,7 +340,9 @@ useEffect(() => {
                     headerTitle: "",            
                 }}    
             />
-
+            <Button title="Disconnect Phantom" onPress={disconnect}></Button>
+            <Button title="Sign And Send Transaction" onPress={signAndSendTransaction(tx)}></Button> 
+            {/* // TODO : To finish it */}
           
             {/* <ScrollView showsVerticalScrollIndicator={false}>   
                 <Main />
