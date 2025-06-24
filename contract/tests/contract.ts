@@ -2,6 +2,10 @@ import * as anchor from "@coral-xyz/anchor";
 import { PublicKey, Keypair, LAMPORTS_PER_SOL } from "@solana/web3.js";
 import idl from "../target/idl/contract.json";
 
+// 這兩行刪掉會跑不起來!!!!
+import { Program } from "@coral-xyz/anchor";
+import { Contract } from "../target/types/contract";
+
 /**
  * 建立一個測試用的錢包（Signer），並空投 SOL 至 localnet 測試鏈
  * @param solAmount 空投多少 SOL（預設 1）
