@@ -19,7 +19,7 @@ use crate::instructions::payer::close_expense::* ;
 use crate::instructions::payer::confirm_usd::* ;
 use crate::instructions::payer::finalize_expense::* ;
 
-declare_id!("EotpYAoc7dokSnzuKosXJ41yMM9Ba9dS1ErQhG4EFHRQ");
+declare_id!("EYR8PHamGh1S1PM7d7txEDzyqfGfnchMbQ6tNHMBBsfX");
 
 #[program]
 pub mod contract {

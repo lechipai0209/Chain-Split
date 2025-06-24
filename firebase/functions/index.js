@@ -23,7 +23,7 @@ exports.healthCheck = onRequest((req, res) => {
 exports.instructions = instructions ;
 
 const API_KEY = "56e5e408-6483-4b76-9a90-5a81246a5918";
-const address = "EotpYAoc7dokSnzuKosXJ41yMM9Ba9dS1ErQhG4EFHRQ";
+const address = "EYR8PHamGh1S1PM7d7txEDzyqfGfnchMbQ6tNHMBBsfX";
 const signatures = ["nwTfzXV8LrRGLPwy31J9vLtNU8w36cjusKHYGGT4LzEpT4hZFaePe8Tn5eHTp6v9e2N3EUzabJcuGW5GnMJNtKx"];
 
 exports.getAddress = onRequest(async (req, res) => {

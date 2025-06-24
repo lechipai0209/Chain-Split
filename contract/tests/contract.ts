@@ -43,7 +43,7 @@ describe("contract", () => {
   const provider = anchor.AnchorProvider.env();
   anchor.setProvider(provider);
 
-  const programId = new anchor.web3.PublicKey("EotpYAoc7dokSnzuKosXJ41yMM9Ba9dS1ErQhG4EFHRQ");
+  const programId = new anchor.web3.PublicKey("EYR8PHamGh1S1PM7d7txEDzyqfGfnchMbQ6tNHMBBsfX");
   const program = new anchor.Program(idl as anchor.Idl, programId, provider);
   
   const myWallet = anchor.workspace.contract.provider.wallet;
