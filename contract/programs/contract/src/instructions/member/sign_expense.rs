@@ -36,11 +36,11 @@ pub fn sign_expense_handler(
     }// redundent check for preventing same member payment
 
     let end = if expense_account.verified.iter().any(|v| *v == VerifiedType::False) {
-        VerifiedType::False
+        "False".to_string()
     } else if expense_account.verified.iter().any(|v| *v == VerifiedType::None) {
-        VerifiedType::None
+        "None".to_string()
     } else {
-        VerifiedType::True
+        "True".to_string()
     }; // 順便把結果傳回去
 
     emit!(ExpenseSignedEvent {
@@ -62,7 +62,7 @@ pub struct ExpenseSignedEvent {
     pub account: String,
     pub verified: bool,
     pub total_expense: u32,
-    pub end: VerifiedType
+    pub end: String
 }
 
 
