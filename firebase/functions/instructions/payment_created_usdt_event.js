@@ -1,6 +1,6 @@
 const { db, admin } = require("../config/firestore"); 
 
-const expenseFinalizedEvent = async (info, res) => {
+const paymentCreatedUsdtEvent = async (info, res) => {
   const { data, event, txSig } = info;
 
   try {
@@ -13,15 +13,17 @@ const expenseFinalizedEvent = async (info, res) => {
           txSig: txSig,
           group: data.group,
           signer: data.signer,
-          account: data.account,
+          payer: data.payer,
+          recipient: data.recipient,
+          amount: data.amount,
         })
     });
 
-    return res.status(200).send({ message: "Expense Finalized successfully." });
+    return res.status(200).send({ message: "Payment Paid successfully." });
   } catch (error) {
-    return res.status(500).send({ error: "Failed to finalize expense", detail: error.message });
+    return res.status(500).send({ error: "Failed to pay payment", detail: error.message });
   
   }
 };
 
-module.exports = expenseFinalizedEvent;
+module.exports = paymentCreatedUsdtEvent;

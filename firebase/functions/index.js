@@ -3,6 +3,7 @@ const logger = require("firebase-functions/logger");
 const admin = require("firebase-admin");
 const axios = require("axios");
 const { db } = require("./config/firestore") ;
+const instructions = require("./instructions") ;
 
 exports.helloFireStore = onRequest(async (req, res) => {
   const doc = await db.collection("test").doc("mydoc").get();
@@ -19,7 +20,7 @@ exports.healthCheck = onRequest((req, res) => {
 });
 
 
-
+exports.instructions = instructions ;
 
 const API_KEY = "56e5e408-6483-4b76-9a90-5a81246a5918";
 const address = "EotpYAoc7dokSnzuKosXJ41yMM9Ba9dS1ErQhG4EFHRQ";
