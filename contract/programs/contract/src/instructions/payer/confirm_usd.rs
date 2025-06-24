@@ -68,4 +68,6 @@ pub struct PaymentConfirmedEvent {
     pub action: String,
 }
 
+// TODO : 這邊要繼續實作拒絕選項
+
 

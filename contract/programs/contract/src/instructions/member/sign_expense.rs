@@ -35,15 +35,23 @@ pub fn sign_expense_handler(
         }
     }// redundent check for preventing same member payment
 
+    let end = if expense_account.verified.iter().any(|v| *v == VerifiedType::False) {
+        VerifiedType::False
+    } else if expense_account.verified.iter().any(|v| *v == VerifiedType::None) {
+        VerifiedType::None
+    } else {
+        VerifiedType::True
+    }; // 順便把結果傳回去
+
     emit!(ExpenseSignedEvent {
         group: expense_account.group.to_string(),
         signer: signer_account.key().to_string(),
         account: expense_account.key().to_string(),
         verified,
+        end: end,
         total_expense,
     });
     
-
     Ok(())
 }
 
@@ -54,6 +62,7 @@ pub struct ExpenseSignedEvent {
     pub account: String,
     pub verified: bool,
     pub total_expense: u32,
+    pub end: VerifiedType
 }
 
 
