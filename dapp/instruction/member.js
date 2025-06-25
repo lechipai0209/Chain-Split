@@ -6,11 +6,6 @@ import {
   PublicKey,
   SystemProgram
 } from "@solana/web3.js";
-import { Program, AnchorProvider } from '@coral-xyz/anchor';
-// important : only anchor@0.28.0 can run on react-native
-// please download correct version !! (latest versions greatly 
-// rely on node.js core, which just doesn't work on react-native)
-// these are a bunch of packages needed to run anchor on react-native
 import idl from '../idl/contract.json'; 
 import { Buffer } from 'buffer';
 global.Buffer = Buffer;
@@ -23,33 +18,80 @@ const connection = new Connection(clusterApiUrl("devnet"));
 const provider = new AnchorProvider(connection, {}, {});
 const programId = new PublicKey("EYR8PHamGh1S1PM7d7txEDzyqfGfnchMbQ6tNHMBBsfX");
 const program = new Program(idl, programId, provider);
+import { Program, AnchorProvider } from '@coral-xyz/anchor';
+// important : only anchor@0.28.0 can run on react-native
+// please download correct version !! (latest versions greatly 
+// rely on node.js core, which just doesn't work on react-native)
+// these are a bunch of packages needed to run anchor on react-native
 
 
-// const closePayWithUsdTrans = async () => {
+const closePayWithUsdTrans = async () => {
 
-// } ;
+} ;
 
-// const joinGroupTrans = async () => {
+const joinGroupTrans = async (phantomWalletPublicKey, groupPda) => {
 
-// } ;
+  const trans = await program.methods
+  .joinGroup()
+  .accounts({
+    group: new PublicKey(groupPda),
+    signer: new PublicKey(phantomWalletPublicKey),
+  })
+  .transaction();
 
-// const payWithUsdTrans = async () => {
+  return trans ;
+} ;
 
-// } ;
+const payWithUsdTrans = async (
+  phantomWalletPublicKey,
+  recipient,
+  groupPda,
+) => {
+  nonce = generateNonce(7);
+  const [paymentPda, bump ] = PublicKey.findProgramAddressSync(
+    [
+      Buffer.from("payment"),
+      Buffer.from(nonce)
+    ],
+    programId
+  );
 
-// const closePayWithUsdtTrans = async () => {
+  
+  const trans = await program.methods
+  .payWithUsd(nonce, 80)
+  .accounts({
+    payer: new PublicKey(phantomWalletPublicKey),
+    recipient: new PublicKey(recipient),
+    group: new PublicKey(groupPda),
+    payment: new PublicKey(paymentPda),
+    systemProgram: SystemProgram.programId
+  })
+  .transaction();
 
-// } ;
+  return trans ;
+} ;
 
-// const signExpenseTrans = async () => {
+const closePayWithUsdtTrans = async () => {
 
-// } ;
+} ;
+
+const signExpenseTrans = async (phantomWalletPublicKey, expensePda, verified) => {
+  const trans = await program.methods
+  .signExpense(verified)
+  .accounts({
+    signer: new PublicKey(phantomWalletPublicKey),
+    expense: new PublicKey(expensePda)
+  })
+  .transaction();
+
+  return trans ;
+} ;
 
 
-// export { 
-//   closePayWithUsdTrans, 
-//   joinGroupTrans, 
-//   payWithUsdTrans, 
-//   closePayWithUsdtTrans, 
-//   signExpenseTrans 
-// } ;
+export { 
+  closePayWithUsdTrans, 
+  joinGroupTrans, 
+  payWithUsdTrans, 
+  closePayWithUsdtTrans, 
+  signExpenseTrans 
+} ;

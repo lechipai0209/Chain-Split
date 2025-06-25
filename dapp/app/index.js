@@ -10,7 +10,6 @@ import Main from '../components/main/main' ;
 import registerNNPushToken from 'native-notify';
 import { registerIndieID } from 'native-notify';
 import * as Notifications from 'expo-notifications';
-
 // =================================================================================
 import * as Linking from 'expo-linking';
 import { PublicKey, Connection, clusterApiUrl} from "@solana/web3.js";
@@ -28,7 +27,6 @@ import { decryptPayload, encryptPayload } from '../utils';
 const onConnectRedirectLink = Linking.createURL("onConnect");
 const onDisconnectRedirectLink = Linking.createURL("onDisconnect");
 const onSignAndSendTransactionRedirectLink = Linking.createURL("onSignAndSendTransaction")
-
 // =================================================================================
 
 
@@ -180,8 +178,6 @@ const Home = () => {
       console.log(error, "damn it") ;
     }
   };
-
-
 
   const signAndSendTransaction = async (transaction) => {
     if (!phantomWalletPublicKey) return;
@@ -357,12 +353,14 @@ useEffect(() => {
               try{
                 const trans = await Instruction.createGroupTrans(phantomWalletPublicKey) ;
                 await signAndSendTransaction(trans);
-                console.log("press", phantomWalletPublicKey) ;
               }catch(error) {
-                console.log(error, "what") ;
+                console.log(error, "signAndSendTransaction") ;
               }
-            }}>
-            </Button> 
+            }}/>
+
+
+
+            
             {/* // TODO : To finish it */}
           
             {/* <ScrollView showsVerticalScrollIndicator={false}>   

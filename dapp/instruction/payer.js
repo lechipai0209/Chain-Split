@@ -6,11 +6,6 @@ import {
   PublicKey,
   SystemProgram
 } from "@solana/web3.js";
-import { Program, AnchorProvider } from '@coral-xyz/anchor';
-// important : only anchor@0.28.0 can run on react-native
-// please download correct version !! (latest versions greatly 
-// rely on node.js core, which just doesn't work on react-native)
-// these are a bunch of packages needed to run anchor on react-native
 import idl from '../idl/contract.json'; 
 import { Buffer } from 'buffer';
 global.Buffer = Buffer;
@@ -23,6 +18,11 @@ const connection = new Connection(clusterApiUrl("devnet"));
 const provider = new AnchorProvider(connection, {}, {});
 const programId = new PublicKey("EYR8PHamGh1S1PM7d7txEDzyqfGfnchMbQ6tNHMBBsfX");
 const program = new Program(idl, programId, provider);
+import { Program, AnchorProvider } from '@coral-xyz/anchor';
+// important : only anchor@0.28.0 can run on react-native
+// please download correct version !! (latest versions greatly 
+// rely on node.js core, which just doesn't work on react-native)
+// these are a bunch of packages needed to run anchor on react-native
 
 
 // const closeExpenseTrans = async () => {
