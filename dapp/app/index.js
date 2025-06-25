@@ -71,6 +71,37 @@ const Home = () => {
   const [dappKeyPair] = useState(nacl.box.keyPair());
 
 
+  // initialize variable
+  useEffect(() => {
+    const getwallet = async () => {
+      const wallet = await utils.getWallet() ;
+      const walletObj = new PublicKey(wallet);
+      console.log(wallet, "wallet") ;
+      setPhantomWalletPublicKey(walletObj) ;
+    }
+
+    const getSharedSecret = async () => {
+      try{
+        const base64Secret = await utils.getSharedSecret() ;
+        const secret = new Uint8Array(Buffer.from(base64Secret, 'base64'));
+        setSharedSecret(secret) ;
+      }catch(error){
+        console.log(error) ;
+      }
+    }
+
+    const getSession = async () => {
+      const session = await utils.getSession() ;
+      console.log(session, "session") ;
+      setSession(session) ;
+    }
+
+    getwallet() ;
+    getSharedSecret() ;
+    getSession() ;
+  }, []);
+
+
 
   /**
    * all of these before jsx are about how to jump to phantom and jump back
@@ -133,6 +164,7 @@ const Home = () => {
 
   const disconnect = async () => {
     try{
+      console.log(session, sharedSecret) ;
       const payload = {session};
       const [nonce, encryptedPayload] = encryptPayload(payload, sharedSecret);
       const params = new URLSearchParams({
@@ -142,6 +174,7 @@ const Home = () => {
         payload: bs58.encode(encryptedPayload),
       });
       const url = buildUrl("disconnect", params);
+      
       Linking.openURL(url);
     }catch(error) {
       console.log(error, "damn it") ;
@@ -152,7 +185,6 @@ const Home = () => {
 
   const signAndSendTransaction = async (transaction) => {
     if (!phantomWalletPublicKey) return;
-    setSubmitting(true);
     transaction.feePayer = phantomWalletPublicKey;
     transaction.recentBlockhash = (
       await connection.getLatestBlockhash()
@@ -198,13 +230,6 @@ const Home = () => {
  * to listen the deeplink.
  */
 useEffect(() => {
-  
-  const getSaveWalletAddress = async () => {
-    const saveWalletAddress = await AsyncStorage.getItem('saveWalletAddress');
-    setPhantomWalletPublicKey(saveWalletAddress) ;
-  }
-
-  getSaveWalletAddress() ;
   //senario 1: cold activate
   const initializeDeeplinks = async () => {
     const initialUrl = await Linking.getInitialURL();
@@ -242,14 +267,14 @@ useEffect(() => {
 
   // simple error handling
   if (params.get("errorCode")) {
+    console.log("errorrrrrrrrrr: ", params.get("errorCode"));
     const error = Object.fromEntries([...params]);
     const message =
       error?.errorMessage ??
       JSON.stringify(Object.fromEntries([...params]), null, 2);
-    console.log("error: ", message);
+    console.log("errorrr: ", message);
     return;
   }
-
 
   if (/onConnect/.test(url.pathname)) {
     console.log("we received a connect response from Phantom: ", url);
@@ -266,26 +291,33 @@ useEffect(() => {
     setSharedSecret(sharedSecretDapp);
     setSession(connectData.session);
     setPhantomWalletPublicKey(new PublicKey(connectData.public_key));
+    console.log("JSON.stringify(sharedSecretDapp)", JSON.stringify(sharedSecretDapp)) ;
+    console.log("sharedSecretDapp", sharedSecretDapp) ;
+    console.log("sharedSecretDapp type", typeof sharedSecretDapp) ;
+    const publicKeyString = new PublicKey(connectData.public_key).toBase58();
+    const base64Secret = Buffer.from(sharedSecretDapp).toString('base64') ;
+    console.log("onConnect base64Secret", base64Secret) ;
+    utils.setSharedSecret(base64Secret) ;
+    utils.setSession(connectData.session) ;
+    utils.setWallet(publicKeyString) ;
+
+  
+
     console.log(`connected to ${connectData.public_key.toString()}`);
     
-    const setSaveWalletAddress = async () => {
-      const publicKey = new PublicKey(connectData.public_key).toString();
-      await AsyncStorage.setItem(
-        'saveWalletAddress', 
-        publicKey
-      );
-    }
-    setSaveWalletAddress() ;
   }
 
   if(/onDisconnect/.test(url.pathname)) {
-    setPhantomWalletPublicKey(null) ;
+    setSharedSecret(null);
+    setSession(null);
+    setPhantomWalletPublicKey(null);
+
+    utils.setSharedSecret("") ;
+    utils.setSession("") ;
+    utils.setWallet("") ;
+
     console.log("disconnected") ;
 
-    const setSaveWalletAddress = async () => {
-      await AsyncStorage.setItem('saveWalletAddress', null);
-    }
-    setSaveWalletAddress() ;
   }
 
   if (/onSignAndSendTransaction/.test(url.pathname)) {
@@ -321,7 +353,16 @@ useEffect(() => {
                 }}    
             />
             <Button title="Disconnect Phantom" onPress={disconnect}></Button>
-            <Button title="Sign And Send Transaction" onPress={signAndSendTransaction(tx)}></Button> 
+            <Button title="Sign And Send Transaction" onPress={async () => {
+              try{
+                const trans = await Instruction.createGroupTrans(phantomWalletPublicKey) ;
+                await signAndSendTransaction(trans);
+                console.log("press", phantomWalletPublicKey) ;
+              }catch(error) {
+                console.log(error, "what") ;
+              }
+            }}>
+            </Button> 
             {/* // TODO : To finish it */}
           
             {/* <ScrollView showsVerticalScrollIndicator={false}>   
