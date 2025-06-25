@@ -5,57 +5,38 @@ import { icons, COLORS, FONTS, SIZES  } from '../constants' ;
 import HeaderWallet  from '../components/common/header_wallet/header_wallet' ;
 import Footer from '../components/common/footer/footer' ;
 import Main from '../components/main/main' ;
+// =================================================================================
+//native-notify packages
 import registerNNPushToken from 'native-notify';
 import { registerIndieID } from 'native-notify';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-import 'react-native-get-random-values';
-import "react-native-url-polyfill/auto";
-import * as Linking from 'expo-linking';
 import * as Notifications from 'expo-notifications';
+
+// =================================================================================
+import * as Linking from 'expo-linking';
+import { PublicKey, Connection, clusterApiUrl} from "@solana/web3.js";
+// =================================================================================
+import Instruction  from '../instruction';
+import utils from '../utils/storage';
+// =================================================================================
+// useful enc dec tools
 import nacl from 'tweetnacl';
 import bs58 from 'bs58';
-import {
-  clusterApiUrl,
-  Connection,
-  PublicKey,
-  Transaction,
-  SystemProgram
-} from "@solana/web3.js";
 import { buildUrl } from '../constants';
 import { decryptPayload, encryptPayload } from '../utils';  
-import { Program, AnchorProvider, web3, BN } from '@coral-xyz/anchor';
-import idl from '../idl/contract.json'; 
-
-
-const onConnectRedirectLink = Linking.createURL("onConnect");
+// =================================================================================
 // build a route【"scheme"://onConnect】route, you don't have to write a page for this callback url
+const onConnectRedirectLink = Linking.createURL("onConnect");
 const onDisconnectRedirectLink = Linking.createURL("onDisconnect");
 const onSignAndSendTransactionRedirectLink = Linking.createURL("onSignAndSendTransaction")
 
+// =================================================================================
+
+
 const connection = new Connection(clusterApiUrl("devnet"));
 
-const provider = new AnchorProvider(connection, {}, {});
-const programId = new PublicKey("EYR8PHamGh1S1PM7d7txEDzyqfGfnchMbQ6tNHMBBsfX");
-const program = new Program(idl, programId, provider);
-const nonce = [Math.floor(Math.random() * 256), 23, 88, 44, 190]; 
-const [ groupPda, bump ] = PublicKey.findProgramAddressSync(
-  [Buffer.from("group"), Buffer.from(nonce)],
-  programId
-);
-
-
-const Home = async () => {
+const Home = () => {
   const router = useRouter() ;
   
-  const tx = await program.methods
-    .createGroup(nonce)
-    .accounts({
-      group: groupPda,
-      payer: new PublicKey(phantomWalletPublicKey), // 這是 Phantom 給你的 publicKey
-      systemProgram: SystemProgram.programId,
-    })
-    .transaction();
   /**
    * this is for push notification
    * registerNNPushToken: let native-notify know which group the app belongs to
@@ -85,9 +66,8 @@ const Home = async () => {
   const [deepLink, setDeepLink] = useState(""); 
   // wallet public key
   const [phantomWalletPublicKey, setPhantomWalletPublicKey] = useState(null);
-  const [sharedSecret, setSharedSecret] = useState();// share secret key
-  const [session, setSession] = useState();
-  const [submitting, setSubmitting] = useState(false);
+  const [sharedSecret, setSharedSecret] = useState(null);// share secret key
+  const [session, setSession] = useState(null);
   const [dappKeyPair] = useState(nacl.box.keyPair());
 
 
