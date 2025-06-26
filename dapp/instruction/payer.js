@@ -25,25 +25,97 @@ import { Program, AnchorProvider } from '@coral-xyz/anchor';
 // these are a bunch of packages needed to run anchor on react-native
 
 
-// const closeExpenseTrans = async () => {
-     
-// } ;
+const closeExpenseTrans = async (
+  signerWallet,
+  expensePda
+) => {
+  const trans = await program.methods
+.closeExpense()
+.accounts({
+  signer: new PublicKey(signerWallet),
+  expense: new PublicKey(expensePda)
+})
+.transaction();
 
-// const confirmUsdTrans = async () => {
-     
-// } ;
+return trans ;
+} ;
 
-// const createExpenseTrans = async () => {
-     
-// } ;
+const confirmUsdTrans = async (
+  signerWallet,
+  paymentPda,
+  groupPda
+) => {
+  const trans = await program.methods
+  .confirmUsd()
+  .accounts({
+    signer: new PublicKey(signerWallet),
+    payment: new PublicKey(paymentPda),
+    group: new PublicKey(groupPda)
+  })
+  .transaction();
 
-// const finalizeExpenseTrans = async () => {
-     
-// } ;
+  return trans ;
+} ;
 
-// export { 
-//   closeExpenseTrans, 
-//   confirmUsdTrans, 
-//   createExpenseTrans, 
-//   finalizeExpenseTrans 
-// } ;
+const createExpenseTrans = async (
+  signerWallet,
+  groupPda,
+  memberPublicKey,
+  expenseArray,
+  amount
+) => {
+  const nonce = generateNonce(7) ;
+  const [ expensePda, bump ] = PublicKey.findProgramAddressSync(
+    [
+      Buffer.from("expense"),
+      Buffer.from(nonce)
+    ],
+    programId
+  );
+
+  const convertedKeys = memberPublicKey
+  .map(k => k ? new PublicKey(k) : PublicKey.default);
+
+  const trans = await program.methods
+  .createExpense(
+    nonce,
+    convertedKeys,
+    expenseArray,
+    amount, 
+  )
+  .accounts({
+    payer: new PublicKey(signerWallet),
+    expense: expensePda,
+    group: new PublicKey(groupPda),
+    systemProgram: SystemProgram.programId
+  })
+  .transaction();
+
+  return trans ;
+     
+} ;
+
+const finalizeExpenseTrans = async (
+  signerWallet,
+  expensePda,
+  groupPda
+) => {
+  const trans = await program.methods
+  .finalizeExpense()
+  .accounts({
+    signer: new PublicKey(signerWallet),
+    expense: new PublicKey(expensePda), 
+    group: new PublicKey(groupPda)
+  })
+  .transaction();
+  
+  return trans ;
+     
+} ;
+
+export { 
+  closeExpenseTrans, 
+  confirmUsdTrans, 
+  createExpenseTrans, 
+  finalizeExpenseTrans 
+} ;

@@ -27,7 +27,7 @@ import { Program, AnchorProvider } from '@coral-xyz/anchor';
 
 
 
-const createGroupTrans = async (phantomWalletPublicKey) => {
+const createGroupTrans = async (signerWallet) => {
     
   const nonce = generateNonce(5) ;
 
@@ -40,28 +40,31 @@ const createGroupTrans = async (phantomWalletPublicKey) => {
     .createGroup(nonce)
     .accounts({
       group: groupPda,
-      payer: new PublicKey(phantomWalletPublicKey), // 這是 Phantom 給我的 publicKey
+      payer: new PublicKey(signerWallet), // 這是 Phantom 給我的 publicKey
       systemProgram: SystemProgram.programId,
     })
     .transaction();
   return trans ;
 } ;
 
-const closeGroupTrans = async (groupPda) => {
+const closeGroupTrans = async (signerWallet, groupPda) => {
   const trans = await program.methods
    .closeGroup()
-   .accounts({group: new PublicKey(groupPda)})
+   .accounts({
+    signer: new PublicKey(signerWallet),
+    group: new PublicKey(groupPda)
+  })
    .transaction();
 
   return trans ;
 } ;
 
-const removeGroupMemberTrans = async (phantomWalletPublicKey, groupPda) => {
+const removeGroupMemberTrans = async (signerWallet, groupPda) => {
   const trans = await program.methods
   .removeGroupMember(user_temp.publicKey)
   .accounts({
     group: new PublicKey(groupPda),
-    signer: new PublicKey(phantomWalletPublicKey),
+    signer: new PublicKey(signerWallet),
   })
   .transaction();
 

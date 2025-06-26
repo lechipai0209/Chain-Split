@@ -25,17 +25,30 @@ import { Program, AnchorProvider } from '@coral-xyz/anchor';
 // these are a bunch of packages needed to run anchor on react-native
 
 
-const closePayWithUsdTrans = async () => {
-
+const closePayWithUsdTrans = async (
+  signerWallet,
+  paymentPda
+) => {
+  const trans = await program.methods
+  .closePayWithUsd()
+  .accounts({
+    signer: new PublicKey(signerWallet),
+    payment: new PublicKey(paymentPda),
+  })
+  .transaction() ;
+  return trans ; 
 } ;
 
-const joinGroupTrans = async (phantomWalletPublicKey, groupPda) => {
+const joinGroupTrans = async (
+  signerWallet, 
+  groupPda
+) => {
 
   const trans = await program.methods
   .joinGroup()
   .accounts({
     group: new PublicKey(groupPda),
-    signer: new PublicKey(phantomWalletPublicKey),
+    signer: new PublicKey(signerWallet),
   })
   .transaction();
 
@@ -43,7 +56,7 @@ const joinGroupTrans = async (phantomWalletPublicKey, groupPda) => {
 } ;
 
 const payWithUsdTrans = async (
-  phantomWalletPublicKey,
+  signerWallet,
   recipient,
   groupPda,
 ) => {
@@ -60,7 +73,7 @@ const payWithUsdTrans = async (
   const trans = await program.methods
   .payWithUsd(nonce, 80)
   .accounts({
-    payer: new PublicKey(phantomWalletPublicKey),
+    payer: new PublicKey(signerWallet),
     recipient: new PublicKey(recipient),
     group: new PublicKey(groupPda),
     payment: new PublicKey(paymentPda),
@@ -75,11 +88,15 @@ const closePayWithUsdtTrans = async () => {
 
 } ;
 
-const signExpenseTrans = async (phantomWalletPublicKey, expensePda, verified) => {
+const signExpenseTrans = async (
+  signerWallet, 
+  expensePda, 
+  verified
+) => {
   const trans = await program.methods
   .signExpense(verified)
   .accounts({
-    signer: new PublicKey(phantomWalletPublicKey),
+    signer: new PublicKey(signerWallet),
     expense: new PublicKey(expensePda)
   })
   .transaction();
