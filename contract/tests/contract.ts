@@ -341,7 +341,10 @@ describe("contract", () => {
 // close group
     txSig = await program.methods
     .closeGroup()
-    .accounts({group: groupPda})
+    .accounts({
+      group: groupPda,
+      signer: myWallet.publicKey
+    })
     .signers([])
     .rpc();
 
