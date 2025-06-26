@@ -17,6 +17,7 @@ const expenseFinalizedEvent = async (info, res) => {
           group: data.group,
           signer: data.signer,
           account: data.account,
+          time: data.time,
           index: newIndex
         })
     });

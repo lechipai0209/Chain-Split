@@ -28,6 +28,7 @@ const groupCreatedEvent = async (info, res) => {
         group: data.group,
         members: [data.signer],
         host: data.signer,
+        createdTime: data.time,
         index: 0,
         records: [
           {
@@ -37,6 +38,9 @@ const groupCreatedEvent = async (info, res) => {
             signer: data.signer,
             account: data.account,
             groupName: offChainData.name,
+            time: data.time,
+            closed: false,
+            index: 0
           },
         ],
       });

@@ -22,6 +22,7 @@ const expenseSignedEvent = async (info, res) => {
         verified: data.verified,
         totalExpense: data.total_expense,
         end: data.end,
+        time: data.time,
         index: newIndex
       })
     });

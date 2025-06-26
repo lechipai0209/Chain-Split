@@ -28,6 +28,7 @@ const groupCreatedEvent = async (info, res) => {
           signer: data.signer,
           account: data.account,
           member: data.member,
+          time: data.time,
           index: newIndex
         })
       });

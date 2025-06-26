@@ -22,6 +22,7 @@ const expenseCreatedEvent = async (info, res) => {
         expenseName: offChainData.name,
         members: data.members,
         expense: data.expense,
+        time: data.time,        
         index: newIndex
       })
     });

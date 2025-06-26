@@ -12,12 +12,14 @@ const groupClosedEvent = async (info, res) => {
     await groupDocRef
      .update({
         index: newIndex,
+        closed: true,
         records: admin.firestore.FieldValue.arrayUnion({
           event: event,
           txSig: txSig,
           group: data.group,
           signer: data.signer,
           account: data.account,
+          time: data.time,
           index: newIndex
         })
     });

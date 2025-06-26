@@ -20,6 +20,7 @@ const paymentCreatedUsdtEvent = async (info, res) => {
           payer: data.payer,
           recipient: data.recipient,
           amount: data.amount,
+          time: data.time,
           index: newIndex
         })
     });
