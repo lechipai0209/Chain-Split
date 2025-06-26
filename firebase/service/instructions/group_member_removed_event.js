@@ -1,4 +1,4 @@
-const { db, admin } = require("../config/firestore") ;
+const { db, admin } = require("../../functions/config/firestore") ;
 
 const groupCreatedEvent = async (info, res) => {
   const { data, event, txSig } = info;

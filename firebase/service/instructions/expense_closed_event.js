@@ -1,6 +1,6 @@
-const { db, admin } = require("../config/firestore"); 
+const { db, admin } = require("../../functions/config/firestore");
 
-const expenseFinalizedEvent = async (info, res) => {
+const expenseClosedEvent = async (info, res) => {
   const { data, event, txSig } = info;
 
   try {
@@ -17,11 +17,11 @@ const expenseFinalizedEvent = async (info, res) => {
         })
     });
 
-    return res.status(200).send({ message: "Expense Finalized successfully." });
+    return res.status(200).send({ message: "Expense Closed successfully." });
   } catch (error) {
-    return res.status(500).send({ error: "Failed to finalize expense", detail: error.message });
+    return res.status(500).send({ error: "Failed to close expense", detail: error.message });
   
   }
 };
 
-module.exports = expenseFinalizedEvent;
+module.exports = expenseClosedEvent;

@@ -1,4 +1,4 @@
-const { db, admin } = require("../config/firestore"); // 確認 admin 有引入
+const { db, admin } = require("../../functions/config/firestore"); // 確認 admin 有引入
 
 const groupCreatedEvent = async (info, res) => {
   const { data, event, offChainData, txSig } = info;

@@ -1,6 +1,6 @@
-const { db, admin } = require("../config/firestore"); 
+const { db, admin } = require("../../functions/config/firestore"); 
 
-const paymentCreatedUsdtEvent = async (info, res) => {
+const paymentConfirmedUsdEvent = async (info, res) => {
   const { data, event, txSig } = info;
 
   try {
@@ -13,17 +13,18 @@ const paymentCreatedUsdtEvent = async (info, res) => {
           txSig: txSig,
           group: data.group,
           signer: data.signer,
+          account: data.account,
           payer: data.payer,
           recipient: data.recipient,
           amount: data.amount,
         })
     });
 
-    return res.status(200).send({ message: "Payment Paid successfully." });
+    return res.status(200).send({ message: "Payment Confirmed successfully." });
   } catch (error) {
-    return res.status(500).send({ error: "Failed to pay payment", detail: error.message });
+    return res.status(500).send({ error: "Failed to confirm payment", detail: error.message });
   
   }
 };
 
-module.exports = paymentCreatedUsdtEvent;
+module.exports = paymentConfirmedUsdEvent;
