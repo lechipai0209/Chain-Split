@@ -71,11 +71,11 @@ pub fn pay_with_usdt_handler(
 
     let recipient_index = group_account.member.iter()
         .position(|x| x == &recipient_account.key()).unwrap();
-    group_account.net[recipient_index] += amount as i32;
+    group_account.net[recipient_index] -= amount as i32;
 
     let payer_index = group_account.member.iter()
         .position(|x| x == &payer_account.key()).unwrap();
-    group_account.net[payer_index] -= amount as i32;
+    group_account.net[payer_index] += amount as i32;
 
     emit!(PayWithUsdtEvent {
         group: group_account.key().to_string(),
