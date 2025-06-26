@@ -3,16 +3,7 @@ const logger = require("firebase-functions/logger");
 const admin = require("firebase-admin");
 const axios = require("axios");
 const { db } = require("./config/firestore") ;
-const instructions = require("./instructions") ;
-
-exports.helloFireStore = onRequest(async (req, res) => {
-  const doc = await db.collection("test").doc("mydoc").get();
-  if (!doc.exists) {
-    res.send("No such document !");
-  } else {
-    res.send(doc.data());
-  }
-});
+const instructions = require("../service/instructions") ;
 
 exports.healthCheck = onRequest((req, res) => {
   logger.info("healthcheck", {structuredData: true});
