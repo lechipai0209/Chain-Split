@@ -1,19 +1,23 @@
-const { db, admin } = require("../../functions/config/firestore"); 
+const { db, admin } = require("../../config/firestore"); 
 
 const expenseFinalizedEvent = async (info, res) => {
   const { data, event, txSig } = info;
 
   try {
-    await db.collection("group")
-     .doc(data.group)
-     .update({
-        recordIndex: admin.firestore.FieldValue.increment(1),
+    const groupDocRef = db.collection("group").doc(data.group);
+    const groupSnap = await groupDocRef.get();
+    const currentIndex = groupSnap.exists ? groupSnap.data().index || 0 : 0;
+    const newIndex = currentIndex + 1;
+
+    await groupDocRef.update({
+        index: newIndex,
         records: admin.firestore.FieldValue.arrayUnion({
           event: event,
           txSig: txSig,
           group: data.group,
           signer: data.signer,
           account: data.account,
+          index: newIndex
         })
     });
 

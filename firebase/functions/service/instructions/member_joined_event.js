@@ -1,4 +1,4 @@
-const { db, admin } = require("../../functions/config/firestore");
+const { db, admin } = require("../../config/firestore");
 
 
 const groupCreatedEvent = async (info, res) => {
@@ -8,6 +8,7 @@ const groupCreatedEvent = async (info, res) => {
     const userRef = db.collection("user").doc(data.signer);
     const docSnap = await userRef.get();
 
+    // 不存在先自動創建一個user account
     if (!docSnap.exists) {
       const userDoc = {
         name: data.signer,
@@ -18,18 +19,24 @@ const groupCreatedEvent = async (info, res) => {
       console.log(`✅ User ${data.signer} created in Firestore.`);
     }
 
+
+    const groupDocRef = db.collection("group").doc(data.group);
+    const groupSnap = await groupDocRef.get();
+    const currentIndex = groupSnap.exists ? groupSnap.data().index || 0 : 0;
+    const newIndex = currentIndex + 1;
+
     const record = {
       event: event,
       txSig: txSig,
       group: data.group,
       signer: data.signer,
       account: data.account,
+      index: newIndex
     };
 
-    await db.collection("group")
-      .doc(data.group)
+    await groupDocRef
       .update({
-        recordIndex: admin.firestore.FieldValue.increment(1),
+        index: newIndex,
         members: admin.firestore.FieldValue.arrayUnion(data.signer),
         records: admin.firestore.FieldValue.arrayUnion(record),
       });

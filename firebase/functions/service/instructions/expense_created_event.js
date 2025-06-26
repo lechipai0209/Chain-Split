@@ -1,13 +1,18 @@
-const { db, admin } = require("../../functions/config/firestore"); // 確認 admin 有引入
+const { db, admin } = require("../../config/firestore"); // 確認 admin 有引入
 
 const expenseCreatedEvent = async (info, res) => {
   const { data, event, offChainData, txSig } = info;
 
   try {
-    await db.collection("group")
-     .doc(data.group)
-     .update({
-        recordIndex: admin.firestore.FieldValue.increment(1),
+
+    const groupDocRef = db.collection("group").doc(data.group);
+    const groupSnap = await groupDocRef.get();
+    const currentIndex = groupSnap.exists ? groupSnap.data().index || 0 : 0;
+    const newIndex = currentIndex + 1;
+  
+    await groupDocRef
+      .update({
+        index: newIndex,
         records: admin.firestore.FieldValue.arrayUnion({
         event: event,
         txSig: txSig,
@@ -17,7 +22,8 @@ const expenseCreatedEvent = async (info, res) => {
         expenseName: offChainData.name,
         members: data.members,
         expense: data.expense,
-        })
+        index: newIndex
+      })
     });
 
     // TODO : 要發相關的通知給參與人員(除了signer自己)

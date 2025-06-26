@@ -1,12 +1,16 @@
-const { db, admin } = require("../../functions/config/firestore") ;
+const { db, admin } = require("../../config/firestore") ;
 
 const groupCreatedEvent = async (info, res) => {
   const { data, event, txSig } = info;
 
-  const userRef = db.collection("user").doc(data.member);
-  const groupRef = db.collection("group").doc(data.group);
-
   try {
+    
+    const userRef = db.collection("user").doc(data.member);
+    const groupRef = db.collection("group").doc(data.group);
+    const groupSnap = await groupDocRef.get();
+    const currentIndex = groupSnap.exists ? groupSnap.data().index || 0 : 0;
+    const newIndex = currentIndex + 1;
+    
     await db.runTransaction(async (transaction) => {
       // 1. 清掉user 欄位已面的group
       transaction.update(userRef, {
@@ -16,14 +20,15 @@ const groupCreatedEvent = async (info, res) => {
       // 2. 清掉group 欄位已面的member
       transaction.update(groupRef, {
         members: admin.firestore.FieldValue.arrayRemove(data.member),
-        recordIndex: admin.firestore.FieldValue.increment(1),
+        index: newIndex,
         records: admin.firestore.FieldValue.arrayUnion({
           event: event,
           txSig: txSig,
           group: data.group,
           signer: data.signer,
           account: data.account,
-          member: data.member
+          member: data.member,
+          index: newIndex
         })
       });
     });

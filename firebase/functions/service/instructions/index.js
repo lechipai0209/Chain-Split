@@ -1,6 +1,6 @@
 const { Connection, clusterApiUrl } = require("@solana/web3.js");
 const { EventParser, BorshCoder } = require("@project-serum/anchor");
-const  idl = require( "../../functions/contract.json");
+const  idl = require( "../../contract.json");
 const { onRequest } = require("firebase-functions/v2/https") ;
 const GroupCreatedEvent = require("./group_created_event.js") ;
 const MemberJoinedEvent = require("./member_joined_event.js") ;

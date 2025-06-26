@@ -1,4 +1,4 @@
-const { db, admin } = require("../../functions/config/firestore"); // 確認 admin 有引入
+const { db, admin } = require("../../config/firestore"); // 確認 admin 有引入
 
 const groupCreatedEvent = async (info, res) => {
   const { data, event, offChainData, txSig } = info;
@@ -10,6 +10,7 @@ const groupCreatedEvent = async (info, res) => {
     await db.runTransaction(async (transaction) => {
       const userDoc = await transaction.get(userRef);
 
+      // if user doesn't exist, create it first
       if (!userDoc.exists) {
         transaction.set(userRef, {
           name: data.signer,
@@ -27,7 +28,7 @@ const groupCreatedEvent = async (info, res) => {
         group: data.group,
         members: [data.signer],
         host: data.signer,
-        recordIndex: 0,
+        index: 0,
         records: [
           {
             event: event,
