@@ -200,29 +200,35 @@ describe("contract", () => {
       commitment: "confirmed",
     });
 
-    let signExpenseLog = Array.from(parser.parseLogs(res.meta.logMessages)) ;
-    console.log("this is sign expense : ", signExpenseLog[0], "\n") ;
+    let signExpenseAllLog = Array.from(parser.parseLogs(res.meta.logMessages)) ;
+    const signedExpenseLog = signExpenseAllLog.find(e => e.name === "ExpenseSignedEvent");
+    const autofinalizedLog = signExpenseAllLog.find(e => e.name === "AutoFinalizeEvent");
+    console.log("this is sign expense : ", signedExpenseLog, "\n") ;
+    if(autofinalizedLog){
+      console.log("this is auto finalized expense : ", autofinalizedLog, "\n") ;
+    }
 
+// finalize expense (if not auto finalized)
 
-// finalize expense
+    if(!autofinalizedLog){
+      txSig = await program.methods
+      .finalizeExpense()
+      .accounts({
+        signer: myWallet.publicKey,
+        expense: expensePda, 
+        group: groupPda
+      })
+      .signers([])
+      .rpc();
 
-    txSig = await program.methods
-    .finalizeExpense()
-    .accounts({
-      signer: myWallet.publicKey,
-      expense: expensePda, 
-      group: groupPda
-    })
-    .signers([])
-    .rpc();
+      await provider.connection.confirmTransaction(txSig, "confirmed");
+      res = await provider.connection.getTransaction(txSig, {
+        commitment: "confirmed",
+      });
 
-    await provider.connection.confirmTransaction(txSig, "confirmed");
-    res = await provider.connection.getTransaction(txSig, {
-      commitment: "confirmed",
-    });
-
-    let finalizeExpenseLog = Array.from(parser.parseLogs(res.meta.logMessages)) ;
-    console.log("this is finalize expense : ", finalizeExpenseLog[0], "\n") ;
+      let finalizeExpenseLog = Array.from(parser.parseLogs(res.meta.logMessages)) ;
+      console.log("this is finalize expense : ", finalizeExpenseLog[0], "\n") ;
+    }
 
 // close expense
     txSig = await program.methods
