@@ -10,6 +10,9 @@ pub struct SignExpense<'info> {
 
     #[account(mut)]
     pub expense: Account<'info, ExpenseAccount>,
+
+    #[account(mut)]
+    pub group: Account<'info, GroupAccount>,
 }
 
 
@@ -21,6 +24,7 @@ pub fn sign_expense_handler(
 
     let signer_account = &mut ctx.accounts.signer;
     let expense_account = &mut ctx.accounts.expense;
+    let group_account = &mut ctx.accounts.group;
 
     // whether this guy envolves into the transaction
     require!(
@@ -53,7 +57,7 @@ pub fn sign_expense_handler(
         signer: signer_account.key().to_string(),
         account: expense_account.key().to_string(),
         verified,
-        end: end,
+        end: end.clone(),
         total_expense,
     });
     
@@ -103,7 +107,7 @@ pub struct ExpenseSignedEvent {
 #[event]
 pub struct AutoFinalizeEvent {
     pub group: String,
-    pub account: String
+    pub account: String,
     pub payer: String,
     pub amount: u32,
 }

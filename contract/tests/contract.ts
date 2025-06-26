@@ -190,7 +190,8 @@ describe("contract", () => {
     .signExpense(true)
     .accounts({
       signer: user.publicKey,
-      expense: expensePda
+      expense: expensePda,
+      group: groupPda
     })
     .signers([user.signer])
     .rpc();
