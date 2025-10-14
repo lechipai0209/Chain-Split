@@ -1,5 +1,3 @@
-export const PHANTOM_URL = "https://phantom.app/ul/v1/";
+// URL 相關常量
 
-export const buildUrl = (path, params) =>{
-  return `${PHANTOM_URL}${path}?${params.toString()}`
-}
+export const API_BASE_URL = ""; // 未來可以在這裡設置後端 API URL

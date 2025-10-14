@@ -40,11 +40,11 @@ const createGroupTrans = async (signerWallet) => {
     .createGroup(nonce)
     .accounts({
       group: groupPda,
-      payer: new PublicKey(signerWallet), // 這是 Phantom 給我的 publicKey
+      payer: new PublicKey(signerWallet), // 簽名者的公鑰
       systemProgram: SystemProgram.programId,
     })
     .transaction();
-  return trans ;
+  return trans;
 } ;
 
 const closeGroupTrans = async (signerWallet, groupPda) => {

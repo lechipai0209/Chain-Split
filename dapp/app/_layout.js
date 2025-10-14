@@ -1,7 +1,13 @@
-import { Stack } from "expo-router" ;
+import { Stack } from "expo-router";
 
 const Layout = () => {
-    return <Stack/> ;
-}
+  return (
+    <Stack
+      screenOptions={{
+        headerShown: false, // 隱藏所有頁面的 header
+      }}
+    />
+  );
+};
 
-export default Layout ;
+export default Layout;

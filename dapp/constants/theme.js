@@ -15,13 +15,12 @@ const FONTS ={
 }
 
 const SIZES = {
-  xSmall: 12,
+  xSmall: 10,
   small: 15,
   medium: 20,
   large: 24,
   xLarge: 30,
   xxLarge: 40,
-  
 }
 
 export { COLORS, FONTS, SIZES } ;
