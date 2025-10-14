@@ -11,7 +11,7 @@ contract = "EYR8PHamGh1S1PM7d7txEDzyqfGfnchMbQ6tNHMBBsfX"
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "devnet"
+cluster = "localnet"
 wallet = "/home/kim/.config/solana/id.json"
 
 [scripts]

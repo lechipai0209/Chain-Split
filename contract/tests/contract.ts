@@ -64,7 +64,7 @@ describe("contract", () => {
         Buffer.from(nonce)
       ],
       program.programId
-    );
+    ); // 利用findProgramAddressSync"計算出"pda帳戶的address"
 
 
     let txSig = await program.methods
@@ -74,7 +74,7 @@ describe("contract", () => {
         payer: myWallet.publicKey,
         systemProgram: anchor.web3.SystemProgram.programId,
       })
-      .signers([])
+      .signers([]) //default payer as signer, and no need extra signers
       .rpc();
 
     console.log("this is create group txSig : ", txSig, "\n") ;

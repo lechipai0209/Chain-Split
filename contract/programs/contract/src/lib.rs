@@ -3,24 +3,25 @@ pub mod instructions ;
 
 use anchor_lang::prelude::*;
 
-use crate::state::* ;
-use crate::instructions::hoster::create_group::* ;
-use crate::instructions::hoster::close_group::* ;
-use crate::instructions::hoster::remove_group_member::* ;
+use state::* ;
+use instructions::hoster::create_group::* ;
+use instructions::hoster::close_group::* ;
+use instructions::hoster::remove_group_member::* ;
 
-use crate::instructions::member::join_group::* ;
-use crate::instructions::member::sign_expense::* ;
-use crate::instructions::member::pay_with_usd::* ;
-use crate::instructions::member::pay_with_usdt::* ;
-use crate::instructions::member::close_pay_with_usd::* ;
+use instructions::member::join_group::* ;
+use instructions::member::sign_expense::* ;
+use instructions::member::pay_with_usd::* ;
+use instructions::member::pay_with_usdt::* ;
+use instructions::member::close_pay_with_usd::* ;
 
-use crate::instructions::payer::create_expense::* ;
-use crate::instructions::payer::close_expense::* ;
-use crate::instructions::payer::confirm_usd::* ;
-use crate::instructions::payer::finalize_expense::* ;
+use instructions::payer::create_expense::* ;
+use instructions::payer::close_expense::* ;
+use instructions::payer::confirm_usd::* ;
+use instructions::payer::finalize_expense::* ;
 
 declare_id!("EYR8PHamGh1S1PM7d7txEDzyqfGfnchMbQ6tNHMBBsfX");
 
+// interface : all functions of contract (details in instructions)
 #[program]
 pub mod contract {
     use super::*;
