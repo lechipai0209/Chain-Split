@@ -42,7 +42,7 @@ pub fn finalize_expense_handler(
 
     for (i, member_key) in expense_account.member.iter().enumerate() {
         if member_key == &Pubkey::default() {
-            continue;
+            continue; // not a person
         }
 
         // 記錄扣款

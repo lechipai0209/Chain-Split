@@ -86,7 +86,7 @@ describe("contract", () => {
 
     let creatGroupLog = Array.from(parser.parseLogs(res.meta.logMessages)) ;
     console.log("this is create group : ", creatGroupLog[0], "\n") ;
-
+    console.log(`-----------------------------\n`) ;
     // join group 
     txSig = await program.methods
     .joinGroup()
@@ -96,6 +96,7 @@ describe("contract", () => {
     })
     .signers([user.signer])
     .rpc();
+    console.log("this is join group txSig : ", txSig, "\n") ;
 
     await provider.connection.confirmTransaction(txSig, "confirmed");
     res = await provider.connection.getTransaction(txSig, {
@@ -104,7 +105,7 @@ describe("contract", () => {
 
     let joinGroupLog = Array.from(parser.parseLogs(res.meta.logMessages)) ;
     console.log("this is join group : ", joinGroupLog[0], "\n") ;
-
+    console.log(`-----------------------------\n`) ;
 // remove member 
     txSig = await program.methods
     .joinGroup()
@@ -114,9 +115,9 @@ describe("contract", () => {
     })
     .signers([user_temp.signer])
     .rpc();
-
+    
     await provider.connection.confirmTransaction(txSig, "confirmed");
-
+    
     txSig = await program.methods
     .removeGroupMember(user_temp.publicKey)
     .accounts({
@@ -125,6 +126,7 @@ describe("contract", () => {
     })
     .signers([])
     .rpc();
+    console.log("this is remove member txSig : ", txSig, "\n") ;
 
     await provider.connection.confirmTransaction(txSig, "confirmed");
     res = await provider.connection.getTransaction(txSig, {
@@ -133,7 +135,7 @@ describe("contract", () => {
 
     let removeMemberLog = Array.from(parser.parseLogs(res.meta.logMessages)) ;
     console.log("this is remove member : ", removeMemberLog[0], "\n") ;
-
+    console.log(`-----------------------------\n`) ;
 
 
 // create expense
@@ -175,6 +177,7 @@ describe("contract", () => {
     })
     .signers([]) 
     .rpc();
+    console.log("this is create expense txSig : ", txSig, "\n") ;
 
     await provider.connection.confirmTransaction(txSig, "confirmed");
     res = await provider.connection.getTransaction(txSig, {
@@ -183,7 +186,7 @@ describe("contract", () => {
 
     let createExpenseLog = Array.from(parser.parseLogs(res.meta.logMessages)) ;
     console.log("this is create expense : ", createExpenseLog[0], "\n") ;
-
+    console.log(`-----------------------------\n`) ;
 
 // sign expense
     txSig = await program.methods
@@ -195,6 +198,7 @@ describe("contract", () => {
     })
     .signers([user.signer])
     .rpc();
+    console.log("this is sign expense txSig : ", txSig, "\n") ;
 
     await provider.connection.confirmTransaction(txSig, "confirmed");
     res = await provider.connection.getTransaction(txSig, {
@@ -208,6 +212,7 @@ describe("contract", () => {
     if(autofinalizedLog){
       console.log("this is auto finalized expense : ", autofinalizedLog, "\n") ;
     }
+    console.log(`-----------------------------\n`) ;
 
 // finalize expense (if not auto finalized)
 
@@ -221,6 +226,7 @@ describe("contract", () => {
       })
       .signers([])
       .rpc();
+      console.log("this is finalize expense txSig : ", txSig, "\n") ;
 
       await provider.connection.confirmTransaction(txSig, "confirmed");
       res = await provider.connection.getTransaction(txSig, {
@@ -229,6 +235,7 @@ describe("contract", () => {
 
       let finalizeExpenseLog = Array.from(parser.parseLogs(res.meta.logMessages)) ;
       console.log("this is finalize expense : ", finalizeExpenseLog[0], "\n") ;
+      console.log(`-----------------------------\n`) ;
     }
 
 // close expense
@@ -240,6 +247,7 @@ describe("contract", () => {
     })
     .signers([])
     .rpc();
+    console.log("this is close expense txSig : ", txSig, "\n") ;
 
     await provider.connection.confirmTransaction(txSig, "confirmed");
     res = await provider.connection.getTransaction(txSig, {
@@ -248,7 +256,7 @@ describe("contract", () => {
 
     let closeExpenseLog = Array.from(parser.parseLogs(res.meta.logMessages)) ;
     console.log("this is close expense : ", closeExpenseLog[0], "\n") ;
-
+    console.log(`-----------------------------\n`) ;
 // close pay with usd
     nonce = generateRandomNonce(7);
     const [paymentPdaTemp, bump4] = anchor.web3.PublicKey.findProgramAddressSync(
@@ -271,6 +279,7 @@ describe("contract", () => {
     })
     .signers([user.signer])
     .rpc();
+    console.log("this is pay with usd txSig : ", txSig, "\n") ;
 
     await provider.connection.confirmTransaction(txSig, "confirmed");    
 
@@ -283,6 +292,7 @@ describe("contract", () => {
     })
     .signers([user.signer])
     .rpc() ;
+    console.log("this is close pay with usd txSig : ", txSigClose, "\n") ;
 
     await provider.connection.confirmTransaction(txSigClose, "confirmed");
     res = await provider.connection.getTransaction(txSigClose, {
@@ -291,7 +301,7 @@ describe("contract", () => {
 
     let closePayWithUsdLog = Array.from(parser.parseLogs(res.meta.logMessages)) ;
     console.log("this is close pay with usd : ", closePayWithUsdLog[0], "\n") ;
-
+    console.log(`-----------------------------\n`) ;
 // pay with usd
     nonce = generateRandomNonce(7);
     const [paymentPda, bump3] = anchor.web3.PublicKey.findProgramAddressSync(
@@ -314,6 +324,7 @@ describe("contract", () => {
     })
     .signers([user.signer])
     .rpc();
+    console.log("this is pay with usd txSig : ", txSig, "\n") ;
 
     await provider.connection.confirmTransaction(txSig, "confirmed");
     res = await provider.connection.getTransaction(txSig, {
@@ -322,7 +333,7 @@ describe("contract", () => {
 
     let payWithUsdLog = Array.from(parser.parseLogs(res.meta.logMessages)) ;
     console.log("this is pay with usd : ", payWithUsdLog[0], "\n") ;
-
+    console.log(`-----------------------------\n`) ;
 // confirm usd
     txSig = await program.methods
     .confirmUsd()
@@ -333,6 +344,7 @@ describe("contract", () => {
     })
     .signers([])
     .rpc();
+    console.log("this is confirm usd txSig : ", txSig, "\n") ;
 
     await provider.connection.confirmTransaction(txSig, "confirmed");
     res = await provider.connection.getTransaction(txSig, {
@@ -341,7 +353,7 @@ describe("contract", () => {
 
     let confirmUsdLog = Array.from(parser.parseLogs(res.meta.logMessages)) ;
     console.log("this is confirm usd : ", confirmUsdLog[0], "\n") ;
-
+    console.log(`-----------------------------\n`) ;
 
 
     
@@ -354,6 +366,7 @@ describe("contract", () => {
     })
     .signers([])
     .rpc();
+    console.log("this is close group txSig : ", txSig, "\n") ;
 
     await provider.connection.confirmTransaction(txSig, "confirmed");
     res = await provider.connection.getTransaction(txSig, {
@@ -362,7 +375,7 @@ describe("contract", () => {
 
     let closeGroupLog = Array.from(parser.parseLogs(res.meta.logMessages)) ;
     console.log("this is close group : ", closeGroupLog[0], "\n") ;
-
+    console.log(`-----------------------------\n`) ;
   })
 
 

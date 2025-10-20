@@ -3,6 +3,7 @@ const COLORS ={
     gray: "#e1e1de",
     green: "#4caf50",
     darkgray: "#8e99a3",
+    yellow: "#f3cc68ff",
     transparent: "transparent"
 }
 

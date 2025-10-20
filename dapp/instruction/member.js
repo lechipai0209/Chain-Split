@@ -84,9 +84,9 @@ const payWithUsdTrans = async (
   return trans ;
 } ;
 
-const closePayWithUsdtTrans = async () => {
+// const closePayWithUsdtTrans = async () => {
 
-} ;
+// } ;
 
 const signExpenseTrans = async (
   signerWallet, 
@@ -109,6 +109,6 @@ export {
   closePayWithUsdTrans, 
   joinGroupTrans, 
   payWithUsdTrans, 
-  closePayWithUsdtTrans, 
+  // closePayWithUsdtTrans, 
   signExpenseTrans 
 } ;

@@ -3,8 +3,8 @@ const { db, admin } = require("../../config/firestore");
 const Test = async (info, res) => {
 
   try {
-    await db.collection("test")
-     .doc("test")
+    await db.collection("group")
+     .doc("exampleGroupAddress")
      .set({"testtest": "testpkpkpkpkpk"}); 
     
     return res.status(200).send({ message: "OK" });

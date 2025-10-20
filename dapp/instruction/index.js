@@ -15,7 +15,7 @@ import {
   closePayWithUsdTrans, 
   joinGroupTrans, 
   payWithUsdTrans, 
-  closePayWithUsdtTrans, 
+  // closePayWithUsdtTrans, 
   signExpenseTrans 
 } from "./member.js" ;
 
@@ -32,6 +32,6 @@ export default {
   closePayWithUsdTrans, 
   joinGroupTrans, 
   payWithUsdTrans, 
-  closePayWithUsdtTrans, 
+  // closePayWithUsdtTrans, 
   signExpenseTrans 
 } ;

@@ -7,7 +7,21 @@
  * 
  */
 
-const {onRequest} = require("firebase-functions/v2/https");
-const logger = require("firebase-functions/logger");
+const {onRequest} = require("firebase-functions/v2/https"); // 預設任何人可以訪問
+// const logger = require("firebase-functions/logger");
 
-exports.getAddress
+
+const instructions = require("./service/instructions") ;
+
+const functions = require("firebase-functions");
+
+exports.instructions = instructions ;
+
+// 定義一個 HTTP function
+exports.helloWorld = functions.https.onRequest((request, response) => {
+  response.send("Hello from Firebase!");
+});
+
+exports.test = onRequest(async (req, res) => {
+  res.status(200).send({ message: "OK" });
+});

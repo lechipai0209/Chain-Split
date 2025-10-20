@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Animated } from 'react-native';
 import { useRouter } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { COLORS, FONTS } from '../constants';
 
 /**
@@ -17,10 +18,20 @@ const Welcome = () => {
       toValue: 1,
       duration: 2500, // 2.5秒完成加載
       useNativeDriver: false,
-    }).start(() => {
-      // 動畫完成後跳轉到主頁面
-      setTimeout(() => {
-        router.replace('home'); // 移除開頭的 '/'
+    }).start(async () => {
+      // 動畫完成後檢查設定狀態
+      setTimeout(async () => {
+        try {
+          const setupComplete = await AsyncStorage.getItem('@user_setup_complete');
+          if (setupComplete === 'true') {
+            router.replace('home');
+          } else {
+            router.replace('login');
+          }
+        } catch (error) {
+          console.log('檢查設定失敗:', error);
+          router.replace('login');
+        }
       }, 300);
     });
   }, [router]);

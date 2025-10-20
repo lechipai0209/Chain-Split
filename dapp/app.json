@@ -1,15 +1,32 @@
 {
   "expo": {
-    "scheme": "acme",
+    "scheme": "chainsplit",
     "plugins": [
       "expo-router",
-      "expo-font"
+      "expo-font",
+      "expo-secure-store"
     ],
-    "name": "dapp",
-    "slug": "dapp",
+    "name": "Chain Split",
+    "slug": "chain-split",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
     "android": {
-      "googleServicesFile": ".//google-services.json",
-      "package": "com.kimery.dapp"
+      "package": "com.kimery.chainsplit",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.kimery.chainsplit"
     },
     "extra": {
       "router": {},

@@ -17,8 +17,8 @@
     "@project-serum/anchor": "^0.26.0",
     "axios": "^1.10.0",
     "dotenv": "^16.5.0",
-    "firebase-admin": "^12.6.0",
-    "firebase-functions": "^6.0.1"
+    "firebase-admin": "^13.5.0",
+    "firebase-functions": "^6.5.0"
   },
   "devDependencies": {
     "eslint": "^8.15.0",
