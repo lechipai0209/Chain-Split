@@ -25,31 +25,29 @@ pub fn finalize_expense_handler(
     let signer_account = &mut ctx.accounts.signer;
     let group_account = &mut ctx.accounts.group;
 
-    require!(
-        expense_account.payer == signer_account.key(), 
+    require!( // only payer can finalize
+        expense_account.payer == signer_account.key(),  
         ErrorCode::Unauthorized
     ) ;
-
-    require!(
+    require!( // only all people verified the expense, then the expense can be confirmed
          expense_account.verified.iter().all(|v| *v == VerifiedType::True),
         ErrorCode::NotAllVerified
     ) ;
-
-    require!(
+    require!(// only unfinalized expense can be confirmed
         expense_account.finalized == false, 
         ErrorCode::AlreadyFinalized
     ) ;
-
     for (i, member_key) in expense_account.member.iter().enumerate() {
         if member_key == &Pubkey::default() {
             continue; // not a person
         }
 
-        // 記錄扣款
         if let Some(group_index) = group_account.member.iter().position(|x| x == member_key) {
 
+            // change net table for the member
             group_account.net[group_index] -= expense_account.expense[i] as i32;
             
+            // add the amount to the payer
             if member_key == &expense_account.payer {
                 group_account.net[group_index] += expense_account.amount as i32;
             }    
